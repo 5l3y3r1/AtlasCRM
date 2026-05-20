@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>warm.ge · ლიდის დამატება</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="/js/lucide.min.js"></script>
+
+<style>
+  /* ════════════════════════════════════════════════════════════════
+   warm.ge — Production design system
+   Single source of truth for colours, typography, icons.
+   ════════════════════════════════════════════════════════════════ */
+
+:root {
+    /* Brand */
+    --brand:           #EA580C;   /* solid warm orange */
+    --brand-hover:     #C2410C;
+    --brand-soft:      #FFF7ED;
+    --brand-soft-2:    #FFEDD5;
+    --brand-border:    #FED7AA;
+
+    /* Surfaces */
+    --bg:              #F8FAFC;
+    --surface:         #FFFFFF;
+    --surface-2:       #F1F5F9;
+    --surface-hover:   #F8FAFC;
+
+    /* Text */
+    --text:            #0F172A;
+    --text-muted:      #64748B;
+    --text-subtle:     #94A3B8;
+
+    /* Borders */
+    --border:          #E2E8F0;
+    --border-strong:   #CBD5E1;
+
+    /* States */
+    --success:         #10B981;
+    --success-soft:    #ECFDF5;
+    --warning:         #F59E0B;
+    --warning-soft:    #FFFBEB;
+    --danger:          #EF4444;
+    --danger-soft:     #FEF2F2;
+    --info:            #3B82F6;
+    --info-soft:       #EFF6FF;
+    --purple:          #8B5CF6;
+    --purple-soft:     #F5F3FF;
+
+    /* Sidebar dark variant */
+    --sidebar-bg:      #0F172A;
+    --sidebar-bg-2:    #1E293B;
+    --sidebar-text:    #CBD5E1;
+    --sidebar-text-strong: #F8FAFC;
+    --sidebar-hover:   rgba(255,255,255,0.06);
+
+    /* Shadows */
+    --shadow-xs:       0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-sm:       0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-md:       0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+    --shadow-lg:       0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+    --shadow-xl:       0 20px 25px -5px rgba(15, 23, 42, 0.1),  0 8px 10px -6px rgba(15, 23, 42, 0.04);
+
+    /* Radius */
+    --radius-sm:       6px;
+    --radius:          10px;
+    --radius-lg:       14px;
+    --radius-xl:       18px;
+
+    /* Type scale */
+    --font-sans:       'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-display:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Lucide icon defaults — sized via container font-size */
+.lucide-i,
+[data-lucide] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    vertical-align: -2px;
+}
+.lucide-i svg,
+[data-lucide] svg {
+    width: 1em;
+    height: 1em;
+    stroke-width: 1.75;
+}
+/* Default size scale based on parent */
+.kpi-icon .lucide-i,
+.kpi-icon [data-lucide] { font-size: 20px; }
+.brand-icon .lucide-i,
+.brand-icon [data-lucide] { font-size: 22px; color: white; }
+.nav-icon .lucide-i,
+.nav-icon [data-lucide] { font-size: 18px; }
+.pipeline-icon .lucide-i,
+.pipeline-icon [data-lucide] { font-size: 18px; }
+.stage-icon .lucide-i,
+.stage-icon [data-lucide] { font-size: 18px; }
+
+/* Flag chips for language switcher */
+.flag-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    min-width: 22px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--surface-2);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+}
+
+/* Focus ring (a11y) */
+*:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+}
+
+
+  /* Legacy aliases — kept so older inline styles still work, mapped to new palette */
+  :root {
+    --geo-red: var(--brand);
+    --geo-gold: var(--brand-hover);
+    --navy: #0F172A;
+    --teal: #0EA5E9;
+    --dark: #0F172A;
+    --darker: #0F172A;
+    --muted: var(--text-muted);
+    --card: var(--surface);
+    --input-bg: var(--surface);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 32px 24px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .container { max-width: 720px; margin: 0 auto; }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-actions { margin-left: auto; }
+  .header-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    transition: background .15s, color .15s;
+  }
+  .header-back-link:hover { background: var(--surface-2); color: var(--text); }
+  .header-back-link .lucide-i,
+  .header-back-link [data-lucide] { font-size: 15px; }
+
+  .logo-icon {
+    width: 44px; height: 44px;
+    background: var(--brand);
+    border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    box-shadow: 0 4px 10px rgba(234,88,12,0.3);
+  }
+  .logo-icon .lucide-i, .logo-icon [data-lucide] { font-size: 22px; }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    color: var(--text);
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 12.5px;
+    margin-top: 3px;
+    font-weight: 500;
+  }
+
+  /* Sections */
+  .section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+    letter-spacing: -0.2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title .lucide-i,
+  .section-title [data-lucide] {
+    font-size: 18px;
+    color: var(--brand);
+  }
+
+  .section-desc {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+
+  /* Form Grid */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .full-width { grid-column: 1 / -1; }
+
+  /* Field */
+  .field { display: flex; flex-direction: column; gap: 6px; }
+
+  .field-label {
+    font-size: 12.5px;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .required { color: var(--danger); margin-left: 2px; }
+
+  .input, .select, .textarea {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color .15s, box-shadow .15s;
+    width: 100%;
+  }
+
+  .input:focus, .select:focus, .textarea:focus {
+    outline: none;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgba(234,88,12,0.1);
+    background: var(--surface);
+  }
+
+  .input::placeholder { color: var(--text-subtle); }
+  .textarea::placeholder { color: var(--text-subtle); }
+
+  .select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+
+  .select option { background: var(--surface); color: var(--text); }
+
+  .textarea {
+    min-height: 80px;
+    resize: vertical;
+  }
+
+  /* Source Cards */
+  .source-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+  }
+
+  .source-card {
+    background: var(--input-bg);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 8px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .source-card:hover {
+    border-color: var(--teal);
+    background: rgba(25,167,206,0.08);
+  }
+
+  .source-card.active {
+    background: rgba(234, 88, 12, 0.08);
+    border-color: var(--geo-gold);
+  }
+
+  .source-icon {
+    font-size: 24px;
+    margin-bottom: 6px;
+  }
+
+  .source-name {
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
+  }
+
+  .source-card.active .source-name { color: var(--geo-gold); }
+
+  /* Temperature */
+  .temp-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .temp-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px;
+    cursor: pointer;
+    text-align: center;
+    transition: border-color .15s, background .15s;
+    user-select: none;
+  }
+  .temp-card:hover { border-color: var(--border-strong); }
+  .temp-card.active.hot  { background: var(--danger-soft);  border-color: var(--danger);  }
+  .temp-card.active.warm { background: var(--warning-soft); border-color: var(--warning); }
+  .temp-card.active.cold { background: var(--info-soft);    border-color: var(--info);    }
+
+  .temp-emoji {
+    margin-bottom: 6px;
+    color: var(--text-muted);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 26px;
+  }
+  .temp-emoji .lucide-i, .temp-emoji [data-lucide] { font-size: 20px; }
+  .temp-card.hot  .temp-emoji { color: var(--danger);  }
+  .temp-card.warm .temp-emoji { color: var(--warning); }
+  .temp-card.cold .temp-emoji { color: var(--info);    }
+
+  .temp-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .temp-desc {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
+
+  /* Buttons */
+  .actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    padding-top: 8px;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    font-family: inherit;
+    transition: background .15s, border-color .15s, color .15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.2;
+  }
+  .btn .lucide-i, .btn [data-lucide] { font-size: 16px; }
+
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--text);
+    border-color: var(--border);
+  }
+
+  .btn-secondary:hover { background: var(--surface-2); border-color: var(--border-strong); }
+
+  .btn-primary {
+    background: var(--brand);
+    color: white;
+  }
+
+  .btn-primary:hover { background: var(--brand-hover); }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  /* Alert */
+  .alert {
+    padding: 14px 18px;
+    border-radius: 12px;
+    margin-bottom: 18px;
+    font-size: 13px;
+    display: none;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .alert.show { display: flex; }
+  
+  .alert-success {
+    background: var(--success-soft);
+    border: 1px solid #6EE7B7;
+    color: #047857;
+  }
+  .alert-error {
+    background: var(--danger-soft);
+    border: 1px solid #FCA5A5;
+    color: #B91C1C;
+  }
+  .alert .lucide-i, .alert [data-lucide] { font-size: 18px; flex-shrink: 0; }
+
+  /* Agent assignment box */
+  .agent-box {
+    background: rgba(25,167,206,0.08);
+    border: 1px solid rgba(25,167,206,0.3);
+    border-radius: 10px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .agent-box.no-agent {
+    background: rgba(245,158,11,0.08);
+    border-color: rgba(245,158,11,0.3);
+  }
+
+  .agent-avatar {
+    width: 38px; height: 38px;
+    background: var(--brand);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .agent-info { flex: 1; }
+
+  .agent-name { font-weight: 600; font-size: 14px; }
+  .agent-meta { font-size: 11px; color: var(--muted); }
+
+  @media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .source-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <a href="warm.html" class="header-back-link" style="margin-right: 10px;"><i data-lucide="arrow-left" class="lucide-i"></i> უკან</a>
+    <div class="logo-icon"><i data-lucide="inbox" class="lucide-i"></i></div>
+    <div>
+      <h1>ლიდის დამატება</h1>
+      <div class="subtitle">warm.ge · CRM</div>
+    </div>
+  </div>
+
+  <!-- ALERTS -->
+  <div class="alert alert-success" id="alert-success">
+    <i data-lucide="check-circle-2" class="lucide-i"></i><span id="alert-success-msg"></span>
+  </div>
+  <div class="alert alert-error" id="alert-error">
+    <i data-lucide="alert-circle" class="lucide-i"></i><span id="alert-error-msg"></span>
+  </div>
+
+  <form id="lead-form">
+
+    <!-- ═══ წყარო (SOURCE) ═══ -->
+    <div class="section">
+      <div class="section-title"><i data-lucide="radio" class="lucide-i"></i> წყარო</div>
+      <div class="section-desc">საიდან მოვიდა ლიდი</div>
+
+      <div class="source-grid">
+        <div class="source-card active" data-source="FACEBOOK">
+          <div class="source-icon"><i data-lucide="book" class="lucide-i"></i></div>
+          <div class="source-name">Facebook</div>
+        </div>
+        <div class="source-card" data-source="INSTAGRAM">
+          <div class="source-icon"><i data-lucide="camera" class="lucide-i"></i></div>
+          <div class="source-name">Instagram</div>
+        </div>
+        <div class="source-card" data-source="TIKTOK">
+          <div class="source-icon"><i data-lucide="music" class="lucide-i"></i></div>
+          <div class="source-name">TikTok</div>
+        </div>
+        <div class="source-card" data-source="MYHOME">
+          <div class="source-icon"><i data-lucide="home" class="lucide-i"></i></div>
+          <div class="source-name">myhome.ge</div>
+        </div>
+        <div class="source-card" data-source="SSGE">
+          <div class="source-icon"><i data-lucide="search" class="lucide-i"></i></div>
+          <div class="source-name">ss.ge</div>
+        </div>
+        <div class="source-card" data-source="COLD_CALL">
+          <div class="source-icon"><i data-lucide="phone" class="lucide-i"></i></div>
+          <div class="source-name">ცივი ზარი</div>
+        </div>
+        <div class="source-card" data-source="REFERRAL">
+          <div class="source-icon"><i data-lucide="handshake" class="lucide-i"></i></div>
+          <div class="source-name">რეფერალი</div>
+        </div>
+        <div class="source-card" data-source="WEBSITE">
+          <div class="source-icon"><i data-lucide="globe" class="lucide-i"></i></div>
+          <div class="source-name">საიტი</div>
+        </div>
+        <div class="source-card" data-source="WALK_IN">
+          <div class="source-icon"><i data-lucide="footprints" class="lucide-i"></i></div>
+          <div class="source-name">ოფისში</div>
+        </div>
+        <div class="source-card" data-source="OTHER">
+          <div class="source-icon"><i data-lucide="clipboard-list" class="lucide-i"></i></div>
+          <div class="source-name">სხვა</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ კონტაქტი ═══ -->
+    <div class="section">
+      <div class="section-title"><i data-lucide="user" class="lucide-i"></i> კონტაქტი</div>
+      <div class="section-desc">ვინ არის და როგორ დავუკავშირდეთ</div>
+
+      <div class="form-grid">
+        <div class="field full-width">
+          <label class="field-label">სრული სახელი</label>
+          <input class="input" id="full-name" type="text" placeholder="სახელი გვარი" />
+        </div>
+
+        <div class="field">
+          <label class="field-label">ტელეფონი <span class="required">*</span></label>
+          <input class="input" id="phone" type="tel" placeholder="+995 5XX XXX XXX" required />
+        </div>
+
+        <div class="field">
+          <label class="field-label">ელ-ფოსტა</label>
+          <input class="input" id="email" type="email" placeholder="example@mail.com" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ინტერესი ═══ -->
+    <div class="section">
+      <div class="section-title"><i data-lucide="message-circle" class="lucide-i"></i> ინტერესი</div>
+      <div class="section-desc">რას ეძებს კლიენტი</div>
+
+      <div class="form-grid">
+        <div class="field full-width">
+          <label class="field-label">შეტყობინება / მოთხოვნა</label>
+          <textarea class="textarea" id="inquiry" placeholder="მაგ: ვაკეში ბინა 200,000$-მდე, 3 ოთახიანი"></textarea>
+        </div>
+
+        <div class="field full-width">
+          <label class="field-label">სიმხურვალე <span class="required">*</span></label>
+          <div class="temp-grid">
+            <div class="temp-card hot" data-temp="HOT">
+              <div class="temp-emoji"><i data-lucide="flame" class="lucide-i"></i></div>
+              <div class="temp-name">ცხელი</div>
+              <div class="temp-desc">მზადაა გარიგებაზე</div>
+            </div>
+            <div class="temp-card warm active" data-temp="WARM">
+              <div class="temp-emoji"><i data-lucide="sun" class="lucide-i"></i></div>
+              <div class="temp-name">თბილი</div>
+              <div class="temp-desc">აქტიური ინტერესი</div>
+            </div>
+            <div class="temp-card cold" data-temp="COLD">
+              <div class="temp-emoji"><i data-lucide="snowflake" class="lucide-i"></i></div>
+              <div class="temp-name">ცივი</div>
+              <div class="temp-desc">არ ჩქარობს</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ მინიჭება ═══ -->
+    <div class="section">
+      <div class="section-title"><i data-lucide="target" class="lucide-i"></i> აგენტზე მინიჭება</div>
+      <div class="section-desc">ვის გადასცა ლიდი დასამუშავებლად</div>
+
+      <div class="field">
+        <label class="field-label">აგენტი</label>
+        <select class="select" id="agent-select">
+          <option value="">— დატოვე არ-მინიჭებული (NEW status)</option>
+        </select>
+      </div>
+
+      <div class="agent-box no-agent" id="agent-info" style="display:none;">
+        <div class="agent-avatar" style="background: var(--text-muted);"><i data-lucide="user-plus" class="lucide-i"></i></div>
+        <div class="agent-info">
+          <div class="agent-name">ცარიელი ლიდი</div>
+          <div class="agent-meta">დარჩება "ახალი" სტატუსით — შემდეგ მენეჯერი მიანიჭებს</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="actions">
+      <button type="button" class="btn btn-secondary" onclick="window.location.reload()">გასუფთავება</button>
+      <button type="submit" class="btn btn-primary" id="submit-btn"><i data-lucide="save" class="lucide-i"></i> ლიდის შენახვა</button>
+    </div>
+
+  </form>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// SUPABASE
+// ═══════════════════════════════════════════════════════════════
+/* SUPABASE_URL/KEY replaced by same-origin /api proxy */
+async function supabaseQuery(table, params = '') {
+  const url = `/api/data/${table}${params ? '?' + params : ''}`;
+  const response = await fetch(url, { credentials: 'include' });
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`API ${response.status}: ${text}`);
+  }
+  const body = await response.json();
+  return body.data || [];
+}
+
+async function supabaseInsert(table, data) {
+  const url = `/api/data/${table}`;
+  const response = await fetch(url, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText);
+  }
+  const body = await response.json();
+  return body.data;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════
+let state = {
+  source: 'FACEBOOK',
+  temperature: 'WARM',
+  agents: [],
+  companyId: null
+};
+
+// ═══════════════════════════════════════════════════════════════
+// <i data-lucide="rocket" class="lucide-i"></i> INIT
+// ═══════════════════════════════════════════════════════════════
+async function init() {
+  try {
+    const [companies, agents] = await Promise.all([
+      supabaseQuery('companies', 'select=id&limit=1'),
+      supabaseQuery('users', 'select=id,first_name,last_name,active_listings&role=in.(AGENT,BROKER)&order=first_name.asc')
+    ]);
+
+    state.companyId = companies[0]?.id;
+    state.agents = agents;
+
+    populateAgents();
+  } catch (error) {
+    showError('მონაცემები ვერ ჩაიტვირთა: ' + error.message);
+  }
+}
+
+function populateAgents() {
+  const select = document.getElementById('agent-select');
+  select.innerHTML = '<option value="">— დატოვე არ-მინიჭებული (NEW status)</option>' +
+    state.agents.map(a => 
+      `<option value="${a.id}">${a.first_name} ${a.last_name || ''} (${a.active_listings || 0} ობიექტი)</option>`
+    ).join('');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// EVENTS
+// ═══════════════════════════════════════════════════════════════
+
+// Source selector
+document.querySelectorAll('.source-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.source-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    state.source = card.dataset.source;
+  });
+});
+
+// Temperature selector
+document.querySelectorAll('.temp-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.temp-card').forEach(c => c.classList.remove('active'));
+    card.classList.add('active');
+    state.temperature = card.dataset.temp;
+  });
+});
+
+// Agent change
+document.getElementById('agent-select').addEventListener('change', e => {
+  const box = document.getElementById('agent-info');
+  if (e.target.value) {
+    const agent = state.agents.find(a => a.id === e.target.value);
+    if (agent) {
+      box.style.display = 'flex';
+      box.classList.remove('no-agent');
+      const initials = (agent.first_name?.[0] || '') + (agent.last_name?.[0] || '');
+      box.innerHTML = `
+        <div class="agent-avatar">${initials || '<i data-lucide="user" class="lucide-i"></i>'}</div>
+        <div class="agent-info">
+          <div class="agent-name">${agent.first_name} ${agent.last_name || ''}</div>
+          <div class="agent-meta">ლიდი მიენიჭება ASSIGNED სტატუსით</div>
+        </div>
+      `;
+    }
+  } else {
+    box.style.display = 'none';
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// <i data-lucide="save" class="lucide-i"></i> SUBMIT
+// ═══════════════════════════════════════════════════════════════
+document.getElementById('lead-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  hideAlerts();
+
+  const submitBtn = document.getElementById('submit-btn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = '<i data-lucide="hourglass" class="lucide-i"></i> ინახება...';
+
+  try {
+    if (!state.companyId) {
+      throw new Error('კომპანია ბაზაში არ მოიძებნა');
+    }
+
+    const agentId = document.getElementById('agent-select').value;
+    
+    const data = {
+      company_id: state.companyId,
+      full_name: document.getElementById('full-name').value.trim() || null,
+      phone: document.getElementById('phone').value.trim(),
+      email: document.getElementById('email').value.trim() || null,
+      source: state.source,
+      inquiry_message: document.getElementById('inquiry').value.trim() || null,
+      temperature: state.temperature,
+      assigned_to_agent_id: agentId || null,
+      status: agentId ? 'ASSIGNED' : 'NEW',
+      assigned_at: agentId ? new Date().toISOString() : null
+    };
+
+    const result = await supabaseInsert('leads', data);
+    
+    showSuccess(`<i data-lucide="check-circle-2" class="lucide-i"></i> ლიდი წარმატებით დაემატა! ID: ${result[0].lead_number}`);
+    
+    setTimeout(() => {
+      if (confirm('კიდევ ერთი ლიდი დავამატოთ?')) {
+        window.location.reload();
+      }
+    }, 1500);
+    
+  } catch (error) {
+    let msg = error.message;
+    if (msg.includes('valid_phone')) {
+      msg = 'ტელეფონის ფორმატი არასწორია. გამოიყენე: +995 5XX XXX XXX';
+    }
+    showError(msg);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = '<i data-lucide="save" class="lucide-i"></i> ლიდის შენახვა';
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// <i data-lucide="bell" class="lucide-i"></i> ALERTS
+// ═══════════════════════════════════════════════════════════════
+function showSuccess(msg) {
+  document.getElementById('alert-success-msg').textContent = msg;
+  document.getElementById('alert-success').classList.add('show');
+  document.getElementById('alert-error').classList.remove('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showError(msg) {
+  document.getElementById('alert-error-msg').textContent = msg;
+  document.getElementById('alert-error').classList.add('show');
+  document.getElementById('alert-success').classList.remove('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function hideAlerts() {
+  document.getElementById('alert-success').classList.remove('show');
+  document.getElementById('alert-error').classList.remove('show');
+}
+
+init();
+
+// Lucide icons bootstrap (added)
+function renderLucide(){
+    if (window.lucide && typeof window.lucide.createIcons==='function') {
+        try { window.lucide.createIcons(); } catch(e){}
+    }
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', renderLucide);
+else renderLucide();
+(function(){
+    let s=false;
+    const mo=new MutationObserver(()=>{
+        if(s) return;
+        s=true;
+        requestAnimationFrame(()=>{ s=false; renderLucide(); });
+    });
+    mo.observe(document.body, {childList:true, subtree:true});
+})();
+
+
+/* ─── Auto-redirect to /login when there's no session ───────────────── */
+(async function ensureSession() {
+    // Login page itself shouldn't redirect
+    if (location.pathname === '/login' || location.pathname === '/' ||
+        location.pathname.endsWith('warm_login.html')) return;
+    try {
+        const r = await fetch('/api/auth/session', { credentials: 'include' });
+        const j = await r.json();
+        if (!j.data || !j.data.session) {
+            location.href = '/login';
+        }
+    } catch (e) { location.href = '/login'; }
+})();
+
+</script>
+
+</body>
+</html>

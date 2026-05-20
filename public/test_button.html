@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>warm.ge — ღილაკის ტესტი</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="/js/lucide.min.js"></script>
+
+<style>
+:root {
+    --brand:           #EA580C;
+    --brand-hover:     #C2410C;
+    --brand-soft:      #FFF7ED;
+    --bg:              #F8FAFC;
+    --surface:         #FFFFFF;
+    --surface-2:       #F1F5F9;
+    --text:            #0F172A;
+    --text-muted:      #64748B;
+    --border:          #E2E8F0;
+    --success:         #10B981;
+    --success-soft:    #ECFDF5;
+    --radius-sm:       6px;
+    --radius:          10px;
+    --radius-lg:       14px;
+    --shadow-sm:       0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 40px 20px;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    max-width: 540px;
+    width: 100%;
+    box-shadow: var(--shadow-sm);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 8px;
+}
+
+.icon {
+    width: 44px; height: 44px;
+    border-radius: var(--radius);
+    background: var(--brand-soft);
+    color: var(--brand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.icon [data-lucide] { width: 22px; height: 22px; stroke-width: 1.75; }
+
+h1 {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--text);
+}
+
+p.subtitle {
+    color: var(--text-muted);
+    font-size: 13.5px;
+    margin: 4px 0 24px 58px;
+}
+
+button#mybutton {
+    padding: 12px 22px;
+    font-size: 14px;
+    font-weight: 600;
+    background: var(--brand);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-family: inherit;
+    transition: background .15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+button#mybutton:hover { background: var(--brand-hover); }
+button#mybutton [data-lucide] { width: 16px; height: 16px; stroke-width: 2; }
+
+#result {
+    margin-top: 24px;
+    padding: 16px 18px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    min-height: 80px;
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    transition: background .2s, border-color .2s, color .2s;
+}
+#result.ok {
+    background: var(--success-soft);
+    border-color: #A7F3D0;
+    color: #047857;
+}
+#result [data-lucide] {
+    width: 16px;
+    height: 16px;
+    vertical-align: -3px;
+    margin-right: 6px;
+}
+</style>
+</head>
+<body>
+
+<div class="card">
+    <div class="header">
+        <div class="icon"><i data-lucide="flask-conical"></i></div>
+        <div><h1>ღილაკის ტესტი</h1></div>
+    </div>
+    <p class="subtitle">დააჭირე ღილაკს, რომ შეამოწმო JS-ის გაშვება.</p>
+
+    <button id="mybutton">
+        <i data-lucide="mouse-pointer-click"></i>
+        დააჭირე აქ
+    </button>
+
+    <div id="result">შედეგი გამოჩნდება აქ...</div>
+</div>
+
+<script>
+document.getElementById('mybutton').addEventListener('click', function() {
+    const r = document.getElementById('result');
+    r.classList.add('ok');
+    r.innerHTML = '<i data-lucide="check-circle-2"></i> ღილაკი მუშაობს! დრო: ' + new Date().toLocaleTimeString('ka-GE');
+    if (window.lucide) window.lucide.createIcons();
+});
+window.addEventListener('DOMContentLoaded', () => { if (window.lucide) window.lucide.createIcons(); });
+</script>
+
+</body>
+</html>

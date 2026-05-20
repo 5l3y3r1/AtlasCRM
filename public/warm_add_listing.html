@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>warm.ge · ობიექტის დამატება</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="/js/lucide.min.js"></script>
+
+<style>
+  /* ════════════════════════════════════════════════════════════════
+   warm.ge — Production design system
+   Single source of truth for colours, typography, icons.
+   ════════════════════════════════════════════════════════════════ */
+
+:root {
+    /* Brand */
+    --brand:           #EA580C;   /* solid warm orange */
+    --brand-hover:     #C2410C;
+    --brand-soft:      #FFF7ED;
+    --brand-soft-2:    #FFEDD5;
+    --brand-border:    #FED7AA;
+
+    /* Surfaces */
+    --bg:              #F8FAFC;
+    --surface:         #FFFFFF;
+    --surface-2:       #F1F5F9;
+    --surface-hover:   #F8FAFC;
+
+    /* Text */
+    --text:            #0F172A;
+    --text-muted:      #64748B;
+    --text-subtle:     #94A3B8;
+
+    /* Borders */
+    --border:          #E2E8F0;
+    --border-strong:   #CBD5E1;
+
+    /* States */
+    --success:         #10B981;
+    --success-soft:    #ECFDF5;
+    --warning:         #F59E0B;
+    --warning-soft:    #FFFBEB;
+    --danger:          #EF4444;
+    --danger-soft:     #FEF2F2;
+    --info:            #3B82F6;
+    --info-soft:       #EFF6FF;
+    --purple:          #8B5CF6;
+    --purple-soft:     #F5F3FF;
+
+    /* Sidebar dark variant */
+    --sidebar-bg:      #0F172A;
+    --sidebar-bg-2:    #1E293B;
+    --sidebar-text:    #CBD5E1;
+    --sidebar-text-strong: #F8FAFC;
+    --sidebar-hover:   rgba(255,255,255,0.06);
+
+    /* Shadows */
+    --shadow-xs:       0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-sm:       0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-md:       0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+    --shadow-lg:       0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+    --shadow-xl:       0 20px 25px -5px rgba(15, 23, 42, 0.1),  0 8px 10px -6px rgba(15, 23, 42, 0.04);
+
+    /* Radius */
+    --radius-sm:       6px;
+    --radius:          10px;
+    --radius-lg:       14px;
+    --radius-xl:       18px;
+
+    /* Type scale */
+    --font-sans:       'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-display:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Lucide icon defaults — sized via container font-size */
+.lucide-i,
+[data-lucide] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    vertical-align: -2px;
+}
+.lucide-i svg,
+[data-lucide] svg {
+    width: 1em;
+    height: 1em;
+    stroke-width: 1.75;
+}
+/* Default size scale based on parent */
+.kpi-icon .lucide-i,
+.kpi-icon [data-lucide] { font-size: 20px; }
+.brand-icon .lucide-i,
+.brand-icon [data-lucide] { font-size: 22px; color: white; }
+.nav-icon .lucide-i,
+.nav-icon [data-lucide] { font-size: 18px; }
+.pipeline-icon .lucide-i,
+.pipeline-icon [data-lucide] { font-size: 18px; }
+.stage-icon .lucide-i,
+.stage-icon [data-lucide] { font-size: 18px; }
+
+/* Flag chips for language switcher */
+.flag-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    min-width: 22px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--surface-2);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+}
+
+/* Focus ring (a11y) */
+*:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+}
+
+
+  /* Legacy aliases — kept so older inline styles still work, mapped to new palette */
+  :root {
+    --geo-red: var(--brand);
+    --geo-gold: var(--brand-hover);
+    --navy: #0F172A;
+    --teal: #0EA5E9;
+    --dark: #0F172A;
+    --darker: #0F172A;
+    --muted: var(--text-muted);
+    --card: var(--surface);
+    --input-bg: var(--surface);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 32px 24px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .header-actions { margin-left: auto; }
+  .header-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    transition: background .15s, color .15s;
+  }
+  .header-back-link:hover { background: var(--surface-2); color: var(--text); }
+  .header-back-link .lucide-i,
+  .header-back-link [data-lucide] { font-size: 15px; }
+
+  .logo-icon {
+    width: 44px; height: 44px;
+    background: var(--brand);
+    border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    box-shadow: 0 4px 10px rgba(234,88,12,0.3);
+  }
+  .logo-icon .lucide-i, .logo-icon [data-lucide] { font-size: 22px; }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.4px;
+    color: var(--text);
+  }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 12.5px;
+    margin-top: 3px;
+    font-weight: 500;
+  }
+
+  /* Form sections */
+  .form-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--text);
+    letter-spacing: -0.2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title .lucide-i,
+  .section-title [data-lucide] {
+    font-size: 18px;
+    color: var(--brand);
+  }
+
+  .section-desc {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+
+  /* Form grid */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .form-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .full-width { grid-column: 1 / -1; }
+
+  /* Form field */
+  .field { display: flex; flex-direction: column; gap: 6px; }
+
+  .field-label {
+    font-size: 12.5px;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .field-label .required { color: var(--danger); margin-left: 2px; }
+
+  .input, .select, .textarea {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color .15s, box-shadow .15s;
+    width: 100%;
+  }
+
+  .input:focus, .select:focus, .textarea:focus {
+    outline: none;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px rgba(234,88,12,0.1);
+    background: var(--surface);
+  }
+
+  .input::placeholder { color: var(--text-subtle); }
+  .textarea::placeholder { color: var(--text-subtle); }
+
+  .select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+
+  .select:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .select option { background: var(--surface); color: var(--text); }
+
+  .textarea {
+    min-height: 90px;
+    resize: vertical;
+    font-family: inherit;
+  }
+
+  .input-with-prefix {
+    position: relative;
+  }
+
+  .input-with-prefix .input { padding-left: 32px; }
+
+  .input-prefix {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 600;
+    pointer-events: none;
+  }
+
+  /* Toggle Buttons */
+  .toggle-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .toggle-btn {
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    color: white;
+    padding: 9px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+  }
+
+  .toggle-btn:hover { border-color: var(--teal); }
+
+  .toggle-btn.active {
+    background: var(--brand);
+    border-color: transparent;
+    font-weight: 700;
+  }
+
+  /* Checkboxes */
+  .checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .checkbox-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background .15s, border-color .15s;
+    user-select: none;
+  }
+  .checkbox-item:hover { background: var(--surface-hover); border-color: var(--border-strong); }
+  .checkbox-item.checked {
+    background: var(--brand-soft);
+    border-color: var(--brand);
+  }
+
+  .checkbox-item input { display: none; }
+
+  .checkbox-icon {
+    width: 18px; height: 18px;
+    border: 1.5px solid var(--border-strong);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .15s, border-color .15s;
+    flex-shrink: 0;
+  }
+  .checkbox-item.checked .checkbox-icon {
+    background: var(--brand);
+    border-color: var(--brand);
+  }
+  .checkbox-item.checked .checkbox-icon::after {
+    content: '';
+    width: 5px; height: 9px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) translate(-1px, -1px);
+  }
+  .checkbox-label {
+    font-size: 13px;
+    color: var(--text);
+  }
+
+  /* Buttons */
+  .actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding-top: 20px;
+    margin-top: 4px;
+  }
+
+  .btn {
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    font-family: inherit;
+    transition: background .15s, border-color .15s, color .15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.2;
+  }
+  .btn .lucide-i, .btn [data-lucide] { font-size: 16px; }
+
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--text);
+    border-color: var(--border);
+  }
+
+  .btn-secondary:hover { background: var(--surface-2); border-color: var(--border-strong); }
+
+  .btn-primary {
+    background: var(--brand);
+    color: white;
+  }
+
+  .btn-primary:hover { background: var(--brand-hover); }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* Alert */
+  .alert {
+    padding: 14px 18px;
+    border-radius: 12px;
+    margin-bottom: 18px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    display: none;
+  }
+
+  .alert.show { display: flex; }
+  
+  .alert-success {
+    background: var(--success-soft);
+    border: 1px solid #6EE7B7;
+    color: #047857;
+  }
+  .alert-error {
+    background: var(--danger-soft);
+    border: 1px solid #FCA5A5;
+    color: #B91C1C;
+  }
+  .alert .lucide-i, .alert [data-lucide] { font-size: 18px; flex-shrink: 0; }
+
+  /* Helper text */
+  .field-helper {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* Calculated value */
+  .calculated {
+    background: rgba(244,169,0,0.08);
+    border: 1px solid rgba(244,169,0,0.3);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 13px;
+    color: var(--geo-gold);
+    font-weight: 600;
+  }
+
+  @media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .form-grid-3 { grid-template-columns: 1fr; }
+    .checkbox-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <a href="warm.html" class="header-back-link" style="margin-right: 10px;"><i data-lucide="arrow-left" class="lucide-i"></i> უკან</a>
+    <div class="logo-icon"><i data-lucide="home" class="lucide-i"></i></div>
+    <div>
+      <h1>ობიექტის დამატება</h1>
+      <div class="subtitle">warm.ge · CRM</div>
+    </div>
+  </div>
+
+  <!-- ALERTS -->
+  <div class="alert alert-success" id="alert-success">
+    <i data-lucide="check-circle-2" class="lucide-i"></i><span id="alert-success-msg"></span>
+  </div>
+
+  <div class="alert alert-error" id="alert-error">
+    <i data-lucide="alert-circle" class="lucide-i"></i><span id="alert-error-msg"></span>
+  </div>
+
+  <form id="listing-form">
+
+    <!-- ═══ ძირითადი ინფო ═══ -->
+    <div class="form-section">
+      <div class="section-title"><i data-lucide="clipboard-list" class="lucide-i"></i> ძირითადი ინფორმაცია</div>
+      <div class="section-desc">ობიექტის სათაური და მოკლე აღწერა</div>
+
+      <div class="form-grid">
+        <div class="field full-width">
+          <label class="field-label">სათაური <span class="required">*</span></label>
+          <input class="input" id="title" type="text" placeholder="მაგ: ვაკეში თანამედროვე ბინა" required />
+        </div>
+
+        <div class="field">
+          <label class="field-label">გარიგების ტიპი <span class="required">*</span></label>
+          <div class="toggle-group">
+            <button type="button" class="toggle-btn active" data-deal-type="SALE"><i data-lucide="home" class="lucide-i"></i> გასაყიდი</button>
+            <button type="button" class="toggle-btn" data-deal-type="RENT"><i data-lucide="key" class="lucide-i"></i> გაქირავება</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">ქონების ტიპი <span class="required">*</span></label>
+          <select class="select" id="property-type" required>
+            <option value="RESIDENTIAL">საცხოვრებელი</option>
+            <option value="COMMERCIAL">კომერციული</option>
+            <option value="LAND">მიწა</option>
+            <option value="MULTI_FAMILY">მრავალბინიანი</option>
+            <option value="HOTEL">სასტუმრო</option>
+          </select>
+        </div>
+
+        <div class="field full-width">
+          <label class="field-label">აღწერა</label>
+          <textarea class="textarea" id="public-remarks" placeholder="დეტალური აღწერა — რემონტი, ხედი, თავისებურებები..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ მდებარეობა ═══ -->
+    <div class="form-section">
+      <div class="section-title"><i data-lucide="map-pin" class="lucide-i"></i> მდებარეობა</div>
+      <div class="section-desc">სად მდებარეობს ობიექტი</div>
+
+      <div class="form-grid-3">
+        <div class="field">
+          <label class="field-label">რეგიონი <span class="required">*</span></label>
+          <select class="select" id="region-select" required>
+            <option value="">იტვირთება...</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="field-label">ქალაქი <span class="required">*</span></label>
+          <select class="select" id="city-select" disabled required>
+            <option value="">ჯერ რეგიონი აირჩიე</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="field-label">უბანი</label>
+          <select class="select" id="district-select" disabled>
+            <option value="">ჯერ ქალაქი აირჩიე</option>
+          </select>
+        </div>
+
+        <div class="field full-width">
+          <label class="field-label">ზუსტი მისამართი</label>
+          <input class="input" id="street-address" type="text" placeholder="მაგ: ჭავჭავაძის გამზირი 12" />
+        </div>
+
+        <div class="field">
+          <label class="field-label">საკადასტრო კოდი <span class="required">*</span></label>
+          <input class="input" id="cadastral-code" type="text" placeholder="01.14.05.001.123" required />
+          <div class="field-helper">უნიკალური უნდა იყოს — ერთი კოდი ერთხელ</div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Latitude</label>
+          <input class="input" id="latitude" type="number" step="0.0000001" placeholder="41.7151" />
+        </div>
+
+        <div class="field">
+          <label class="field-label">Longitude</label>
+          <input class="input" id="longitude" type="number" step="0.0000001" placeholder="44.7764" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ფინანსები ═══ -->
+    <div class="form-section">
+      <div class="section-title"><i data-lucide="dollar-sign" class="lucide-i"></i> ფინანსები</div>
+      <div class="section-desc">ფასი და საკომისიო</div>
+
+      <div class="form-grid" id="sale-fields">
+        <div class="field">
+          <label class="field-label">ფასი ($) <span class="required">*</span></label>
+          <div class="input-with-prefix">
+            <span class="input-prefix">$</span>
+            <input class="input" id="list-price" type="number" min="0" placeholder="185000" required />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">საკომისიო (%)</label>
+          <select class="select" id="commission-rate">
+            <option value="2">2%</option>
+            <option value="3" selected>3%</option>
+            <option value="4">4%</option>
+            <option value="5">5%</option>
+            <option value="custom">სხვა...</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-grid" id="rent-fields" style="display: none;">
+        <div class="field">
+          <label class="field-label">თვის ქირა ($) <span class="required">*</span></label>
+          <div class="input-with-prefix">
+            <span class="input-prefix">$</span>
+            <input class="input" id="rental-monthly" type="number" min="0" placeholder="1200" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">კონტრაქტი (თვე) <span class="required">*</span></label>
+          <input class="input" id="rental-months" type="number" min="1" max="120" placeholder="12" />
+          <div class="field-helper">საკომისიო: თვის_ქირა × (თვეები/12)</div>
+        </div>
+
+        <div class="field full-width">
+          <div class="calculated" id="rent-calc">
+            <i data-lucide="banknote" class="lucide-i"></i> საკომისიო გამოითვლება ფასის შეყვანის შემდეგ
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ მახასიათებლები ═══ -->
+    <div class="form-section">
+      <div class="section-title"><i data-lucide="ruler" class="lucide-i"></i> მახასიათებლები</div>
+      <div class="section-desc">ფართი, ოთახები, სართული</div>
+
+      <div class="form-grid-3">
+        <div class="field">
+          <label class="field-label">საცხოვრებელი ფართი (მ²) <span class="required">*</span></label>
+          <input class="input" id="living-area" type="number" min="1" placeholder="95" required />
+        </div>
+
+        <div class="field">
+          <label class="field-label">საძინებლები</label>
+          <input class="input" id="bedrooms" type="number" min="0" max="20" placeholder="3" />
+        </div>
+
+        <div class="field">
+          <label class="field-label">სველი წერტილი</label>
+          <input class="input" id="bathrooms" type="number" min="0" max="10" placeholder="2" />
+        </div>
+
+        <div class="field">
+          <label class="field-label">სართული</label>
+          <input class="input" id="floor" type="number" min="-2" max="100" placeholder="4" />
+        </div>
+
+        <div class="field">
+          <label class="field-label">სართულიანობა</label>
+          <input class="input" id="floors-total" type="number" min="1" max="100" placeholder="9" />
+        </div>
+
+        <div class="field">
+          <label class="field-label">აშენდა</label>
+          <input class="input" id="year-built" type="number" min="1800" max="2030" placeholder="2020" />
+        </div>
+      </div>
+
+      <div style="margin-top: 16px;">
+        <label class="field-label" style="margin-bottom: 10px; display: block;">დამატებითი ფუნქციები</label>
+        <div class="checkbox-grid">
+          <label class="checkbox-item" data-feature="has_balcony">
+            <input type="checkbox" />
+            <div class="checkbox-icon"></div>
+            <span class="checkbox-label"><i data-lucide="sun" class="lucide-i"></i> აივანი</span>
+          </label>
+          <label class="checkbox-item" data-feature="has_parking">
+            <input type="checkbox" />
+            <div class="checkbox-icon"></div>
+            <span class="checkbox-label"><i data-lucide="car" class="lucide-i"></i> პარკინგი</span>
+          </label>
+          <label class="checkbox-item" data-feature="has_elevator">
+            <input type="checkbox" />
+            <div class="checkbox-icon"></div>
+            <span class="checkbox-label"><i data-lucide="arrow-up-down" class="lucide-i"></i> ლიფტი</span>
+          </label>
+          <label class="checkbox-item" data-feature="has_storage">
+            <input type="checkbox" />
+            <div class="checkbox-icon"></div>
+            <span class="checkbox-label"><i data-lucide="package" class="lucide-i"></i> სასაწყობე</span>
+          </label>
+          <label class="checkbox-item" data-feature="has_garden">
+            <input type="checkbox" />
+            <div class="checkbox-icon"></div>
+            <span class="checkbox-label"><i data-lucide="trees" class="lucide-i"></i> ბაღი</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="actions">
+      <button type="button" class="btn btn-secondary" onclick="window.location.reload()">გასუფთავება</button>
+      <button type="submit" class="btn btn-primary" id="submit-btn"><i data-lucide="save" class="lucide-i"></i> შენახვა</button>
+    </div>
+
+  </form>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// SUPABASE
+// ═══════════════════════════════════════════════════════════════
+/* SUPABASE_URL/KEY replaced by same-origin /api proxy */
+async function supabaseQuery(table, params = '') {
+  const url = `/api/data/${table}${params ? '?' + params : ''}`;
+  const response = await fetch(url, { credentials: 'include' });
+  if (!response.ok) {
+    const text = await response.text();
+    throw new Error(`API ${response.status}: ${text}`);
+  }
+  const body = await response.json();
+  return body.data || [];
+}
+
+async function supabaseInsert(table, data) {
+  const url = `/api/data/${table}`;
+  const response = await fetch(url, {
+    method: 'POST',
+    credentials: 'include',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText);
+  }
+  const body = await response.json();
+  return body.data;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════════
+let state = {
+  dealType: 'SALE',
+  features: {
+    has_balcony: false,
+    has_parking: false,
+    has_elevator: false,
+    has_storage: false,
+    has_garden: false
+  },
+  agencyId: null,
+  agentId: null,
+  companyId: null,
+  regions: [],
+  cities: [],
+  districts: []
+};
+
+// ═══════════════════════════════════════════════════════════════
+// <i data-lucide="rocket" class="lucide-i"></i> LOAD DATA
+// ═══════════════════════════════════════════════════════════════
+async function init() {
+  try {
+    // ვტვირთავთ რეგიონებს, ქალაქებს, უბნებს
+    const [regions, cities, districts, agencies, users, companies] = await Promise.all([
+      supabaseQuery('regions', 'select=id,code,name_ka&order=display_order.asc'),
+      supabaseQuery('cities', 'select=id,code,region_id,name_ka&order=display_order.asc'),
+      supabaseQuery('districts', 'select=id,code,city_id,name_ka&order=display_order.asc'),
+      supabaseQuery('agencies', 'select=id&limit=1'),
+      supabaseQuery('users', 'select=id&role=eq.AGENT&limit=1'),
+      supabaseQuery('companies', 'select=id&limit=1')
+    ]);
+
+    state.regions = regions;
+    state.cities = cities;
+    state.districts = districts;
+    
+    // დროებით — პირველი სააგენტო/აგენტი
+    // (Authentication-ის შემდეგ მომხმარებლის ID-ით შეიცვლება)
+    state.agencyId = agencies[0]?.id;
+    state.agentId = users[0]?.id;
+    state.companyId = companies[0]?.id;
+
+    populateRegions();
+    
+  } catch (error) {
+    showError('მონაცემები ვერ ჩაიტვირთა: ' + error.message);
+  }
+}
+
+function populateRegions() {
+  const select = document.getElementById('region-select');
+  select.innerHTML = '<option value="">აირჩიე რეგიონი</option>' +
+    state.regions.map(r => `<option value="${r.id}">${r.name_ka}</option>`).join('');
+}
+
+function populateCities(regionId) {
+  const select = document.getElementById('city-select');
+  if (!regionId) {
+    select.innerHTML = '<option value="">ჯერ რეგიონი აირჩიე</option>';
+    select.disabled = true;
+    return;
+  }
+  const cities = state.cities.filter(c => c.region_id === regionId);
+  select.innerHTML = '<option value="">აირჩიე ქალაქი</option>' +
+    cities.map(c => `<option value="${c.id}">${c.name_ka}</option>`).join('');
+  select.disabled = false;
+}
+
+function populateDistricts(cityId) {
+  const select = document.getElementById('district-select');
+  if (!cityId) {
+    select.innerHTML = '<option value="">ჯერ ქალაქი აირჩიე</option>';
+    select.disabled = true;
+    return;
+  }
+  const districts = state.districts.filter(d => d.city_id === cityId);
+  if (districts.length === 0) {
+    select.innerHTML = '<option value="">ამ ქალაქში უბანი არ არის ბაზაში</option>';
+    select.disabled = true;
+    return;
+  }
+  select.innerHTML = '<option value="">აირჩიე უბანი (არასავალდებულო)</option>' +
+    districts.map(d => `<option value="${d.id}">${d.name_ka}</option>`).join('');
+  select.disabled = false;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// EVENT HANDLERS
+// ═══════════════════════════════════════════════════════════════
+document.getElementById('region-select').addEventListener('change', e => {
+  populateCities(e.target.value);
+  document.getElementById('district-select').innerHTML = '<option value="">ჯერ ქალაქი აირჩიე</option>';
+  document.getElementById('district-select').disabled = true;
+});
+
+document.getElementById('city-select').addEventListener('change', e => {
+  populateDistricts(e.target.value);
+});
+
+// Deal type toggle
+document.querySelectorAll('[data-deal-type]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-deal-type]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    state.dealType = btn.dataset.dealType;
+    
+    if (state.dealType === 'SALE') {
+      document.getElementById('sale-fields').style.display = 'grid';
+      document.getElementById('rent-fields').style.display = 'none';
+    } else {
+      document.getElementById('sale-fields').style.display = 'none';
+      document.getElementById('rent-fields').style.display = 'grid';
+    }
+  });
+});
+
+// Checkboxes
+document.querySelectorAll('.checkbox-item').forEach(item => {
+  item.addEventListener('click', () => {
+    const feature = item.dataset.feature;
+    state.features[feature] = !state.features[feature];
+    item.classList.toggle('checked');
+  });
+});
+
+// Rent calculator
+function updateRentCalc() {
+  const monthly = parseFloat(document.getElementById('rental-monthly').value) || 0;
+  const months = parseFloat(document.getElementById('rental-months').value) || 0;
+  
+  if (monthly > 0 && months > 0) {
+    const commission = monthly * (months / 12);
+    const agentShare = commission * 0.5;
+    document.getElementById('rent-calc').innerHTML = 
+      `<i data-lucide="banknote" class="lucide-i"></i> სრული საკომისიო: <b>$${commission.toFixed(2)}</b> | აგენტი (50%): <b>$${agentShare.toFixed(2)}</b>`;
+  } else {
+    document.getElementById('rent-calc').textContent = '<i data-lucide="banknote" class="lucide-i"></i> საკომისიო გამოითვლება ფასის შეყვანის შემდეგ';
+  }
+}
+
+document.getElementById('rental-monthly').addEventListener('input', updateRentCalc);
+document.getElementById('rental-months').addEventListener('input', updateRentCalc);
+
+// ═══════════════════════════════════════════════════════════════
+// <i data-lucide="save" class="lucide-i"></i> SUBMIT
+// ═══════════════════════════════════════════════════════════════
+document.getElementById('listing-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  
+  hideAlerts();
+  
+  const submitBtn = document.getElementById('submit-btn');
+  submitBtn.disabled = true;
+  submitBtn.textContent = '<i data-lucide="hourglass" class="lucide-i"></i> ინახება...';
+
+  try {
+    if (!state.agencyId || !state.agentId) {
+      throw new Error('სააგენტო ან აგენტი არ მოიძებნა ბაზაში');
+    }
+
+    // ვაგროვებთ მონაცემებს
+    const regionId = document.getElementById('region-select').value;
+    const cityId = document.getElementById('city-select').value;
+    const districtId = document.getElementById('district-select').value;
+    
+    const region = state.regions.find(r => r.id === regionId);
+    const city = state.cities.find(c => c.id === cityId);
+    const district = state.districts.find(d => d.id === districtId);
+
+    let commissionRate = parseFloat(document.getElementById('commission-rate').value);
+    if (document.getElementById('commission-rate').value === 'custom') {
+      const custom = prompt('საკუთარი საკომისიო % (მაგ: 3.5):', '3');
+      commissionRate = parseFloat(custom) || 3;
+    }
+
+    const data = {
+      agent_id: state.agentId,
+      agency_id: state.agencyId,
+      status: 'ACTIVE',
+      title: document.getElementById('title').value.trim(),
+      public_remarks: document.getElementById('public-remarks').value.trim() || null,
+      property_type: document.getElementById('property-type').value,
+      
+      // Geo
+      region: region?.name_ka,
+      city: city?.name_ka,
+      district: district?.name_ka || null,
+      region_id: regionId,
+      city_id: cityId,
+      district_id: districtId || null,
+      street_address: document.getElementById('street-address').value.trim() || null,
+      cadastral_code: document.getElementById('cadastral-code').value.trim(),
+      
+      // GPS
+      latitude: parseFloat(document.getElementById('latitude').value) || null,
+      longitude: parseFloat(document.getElementById('longitude').value) || null,
+      
+      // Specs
+      living_area: parseFloat(document.getElementById('living-area').value) || null,
+      bedrooms_total: parseInt(document.getElementById('bedrooms').value) || 0,
+      bathrooms_total: parseInt(document.getElementById('bathrooms').value) || 0,
+      floor: parseInt(document.getElementById('floor').value) || null,
+      floors_total: parseInt(document.getElementById('floors-total').value) || null,
+      year_built: parseInt(document.getElementById('year-built').value) || null,
+      
+      // Features
+      has_balcony: state.features.has_balcony,
+      has_parking: state.features.has_parking,
+      has_elevator: state.features.has_elevator,
+      has_storage: state.features.has_storage,
+      has_garden: state.features.has_garden,
+      
+      // Commission
+      commission_rate: commissionRate,
+      currency: 'USD'
+    };
+
+    // SALE vs RENT
+    if (state.dealType === 'SALE') {
+      data.list_price = parseFloat(document.getElementById('list-price').value);
+    } else {
+      data.list_price = parseFloat(document.getElementById('rental-monthly').value);
+      data.rental_monthly_amount = parseFloat(document.getElementById('rental-monthly').value);
+      data.rental_contract_months = parseInt(document.getElementById('rental-months').value);
+    }
+
+    // ვაგზავნით Supabase-ში
+    const result = await supabaseInsert('listings', data);
+    
+    showSuccess(`<i data-lucide="check-circle-2" class="lucide-i"></i> წარმატებით დაემატა! ID: ${result[0].listing_key}`);
+    
+    // Form-ის გასუფთავება
+    setTimeout(() => {
+      if (confirm('კიდევ ერთი ობიექტი დავამატოთ?')) {
+        window.location.reload();
+      }
+    }, 1500);
+    
+  } catch (error) {
+    let message = error.message;
+    if (message.includes('idx_unique_active_cadastral')) {
+      message = 'ეს საკადასტრო კოდი უკვე არსებობს ბაზაში! სხვა აგენტს დადებული აქვს.';
+    } else if (message.includes('valid_areas')) {
+      message = 'ფართი უნდა იყოს დადებითი რიცხვი';
+    } else if (message.includes('positive_price')) {
+      message = 'ფასი უნდა იყოს დადებითი რიცხვი';
+    }
+    showError(message);
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = '<i data-lucide="save" class="lucide-i"></i> შენახვა';
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════
+// <i data-lucide="bell" class="lucide-i"></i> ALERTS
+// ═══════════════════════════════════════════════════════════════
+function showSuccess(msg) {
+  document.getElementById('alert-success-msg').textContent = msg;
+  document.getElementById('alert-success').classList.add('show');
+  document.getElementById('alert-error').classList.remove('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showError(msg) {
+  document.getElementById('alert-error-msg').textContent = msg;
+  document.getElementById('alert-error').classList.add('show');
+  document.getElementById('alert-success').classList.remove('show');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function hideAlerts() {
+  document.getElementById('alert-success').classList.remove('show');
+  document.getElementById('alert-error').classList.remove('show');
+}
+
+// ═══════════════════════════════════════════════════════════════
+init();
+
+// Lucide icons bootstrap (added)
+function renderLucide(){
+    if (window.lucide && typeof window.lucide.createIcons==='function') {
+        try { window.lucide.createIcons(); } catch(e){}
+    }
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', renderLucide);
+else renderLucide();
+(function(){
+    let s=false;
+    const mo=new MutationObserver(()=>{
+        if(s) return;
+        s=true;
+        requestAnimationFrame(()=>{ s=false; renderLucide(); });
+    });
+    mo.observe(document.body, {childList:true, subtree:true});
+})();
+
+
+/* ─── Auto-redirect to /login when there's no session ───────────────── */
+(async function ensureSession() {
+    // Login page itself shouldn't redirect
+    if (location.pathname === '/login' || location.pathname === '/' ||
+        location.pathname.endsWith('warm_login.html')) return;
+    try {
+        const r = await fetch('/api/auth/session', { credentials: 'include' });
+        const j = await r.json();
+        if (!j.data || !j.data.session) {
+            location.href = '/login';
+        }
+    } catch (e) { location.href = '/login'; }
+})();
+
+</script>
+
+</body>
+</html>

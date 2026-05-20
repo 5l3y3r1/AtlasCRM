@@ -1,0 +1,15 @@
+node_modules/
+npm-debug.log*
+
+# Local SQLite DB — the production DB lives on the Railway volume at /data
+warm.db
+warm.db-shm
+warm.db-wal
+
+# Uploaded files (kept on the volume in prod, not in git)
+uploads/*
+!uploads/.gitkeep
+
+.DS_Store
+.env
+.env.*

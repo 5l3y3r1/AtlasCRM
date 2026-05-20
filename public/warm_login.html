@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>warm.ge — შესვლა / რეგისტრაცია</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="/js/lucide.min.js"></script>
+<script src="/js/supabase-shim.js"></script>
+<style>
+/* ════════════════════════════════════════════════════════════════
+   warm.ge — Production design system
+   Single source of truth for colours, typography, icons.
+   ════════════════════════════════════════════════════════════════ */
+
+:root {
+    /* Brand */
+    --brand:           #EA580C;   /* solid warm orange */
+    --brand-hover:     #C2410C;
+    --brand-soft:      #FFF7ED;
+    --brand-soft-2:    #FFEDD5;
+    --brand-border:    #FED7AA;
+
+    /* Surfaces */
+    --bg:              #F8FAFC;
+    --surface:         #FFFFFF;
+    --surface-2:       #F1F5F9;
+    --surface-hover:   #F8FAFC;
+
+    /* Text */
+    --text:            #0F172A;
+    --text-muted:      #64748B;
+    --text-subtle:     #94A3B8;
+
+    /* Borders */
+    --border:          #E2E8F0;
+    --border-strong:   #CBD5E1;
+
+    /* States */
+    --success:         #10B981;
+    --success-soft:    #ECFDF5;
+    --warning:         #F59E0B;
+    --warning-soft:    #FFFBEB;
+    --danger:          #EF4444;
+    --danger-soft:     #FEF2F2;
+    --info:            #3B82F6;
+    --info-soft:       #EFF6FF;
+    --purple:          #8B5CF6;
+    --purple-soft:     #F5F3FF;
+
+    /* Sidebar dark variant */
+    --sidebar-bg:      #0F172A;
+    --sidebar-bg-2:    #1E293B;
+    --sidebar-text:    #CBD5E1;
+    --sidebar-text-strong: #F8FAFC;
+    --sidebar-hover:   rgba(255,255,255,0.06);
+
+    /* Shadows */
+    --shadow-xs:       0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-sm:       0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-md:       0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+    --shadow-lg:       0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
+    --shadow-xl:       0 20px 25px -5px rgba(15, 23, 42, 0.1),  0 8px 10px -6px rgba(15, 23, 42, 0.04);
+
+    /* Radius */
+    --radius-sm:       6px;
+    --radius:          10px;
+    --radius-lg:       14px;
+    --radius-xl:       18px;
+
+    /* Type scale */
+    --font-sans:       'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-display:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Lucide icon defaults — sized via container font-size */
+.lucide-i,
+[data-lucide] {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    vertical-align: -2px;
+}
+.lucide-i svg,
+[data-lucide] svg {
+    width: 1em;
+    height: 1em;
+    stroke-width: 1.75;
+}
+/* Default size scale based on parent */
+.kpi-icon .lucide-i,
+.kpi-icon [data-lucide] { font-size: 20px; }
+.brand-icon .lucide-i,
+.brand-icon [data-lucide] { font-size: 22px; color: white; }
+.nav-icon .lucide-i,
+.nav-icon [data-lucide] { font-size: 18px; }
+.pipeline-icon .lucide-i,
+.pipeline-icon [data-lucide] { font-size: 18px; }
+.stage-icon .lucide-i,
+.stage-icon [data-lucide] { font-size: 18px; }
+
+/* Flag chips for language switcher */
+.flag-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    min-width: 22px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--surface-2);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+}
+
+/* Focus ring (a11y) */
+*:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+}
+
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: var(--font-sans);
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* subtle background pattern */
+    background-image:
+        radial-gradient(circle at 15% 30%, rgba(234,88,12,0.04), transparent 40%),
+        radial-gradient(circle at 85% 70%, rgba(15,23,42,0.04), transparent 40%);
+}
+
+.container { width: 100%; max-width: 460px; }
+
+.logo {
+    text-align: center;
+    margin-bottom: 24px;
+    color: var(--text);
+}
+.logo-icon {
+    width: 56px; height: 56px;
+    margin: 0 auto;
+    border-radius: var(--radius-lg);
+    background: var(--brand);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 24px rgba(234,88,12,0.25);
+}
+.logo-icon .lucide-i, .logo-icon [data-lucide] { font-size: 28px; }
+.logo-text { font-size: 28px; font-weight: 700; margin-top: 12px; letter-spacing: -0.5px; color: var(--text); }
+.logo-sub { font-size: 12.5px; color: var(--text-muted); margin-top: 4px; font-weight: 500; }
+
+.card {
+    background: var(--surface);
+    border-radius: var(--radius-xl);
+    padding: 28px;
+    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--border);
+}
+
+.tabs {
+    display: flex;
+    background: var(--surface-2);
+    border-radius: var(--radius);
+    padding: 4px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border);
+}
+.tab {
+    flex: 1;
+    padding: 9px 10px;
+    text-align: center;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13.5px;
+    color: var(--text-muted);
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    transition: background .15s, color .15s, box-shadow .15s;
+}
+.tab:hover { color: var(--text); }
+.tab.active {
+    background: var(--surface);
+    color: var(--brand);
+    box-shadow: var(--shadow-xs);
+}
+
+.form { display: none; }
+.form.active { display: block; }
+
+h2 { font-size: 20px; margin-bottom: 6px; color: var(--text); font-weight: 700; letter-spacing: -0.3px; }
+.subtitle { font-size: 13.5px; color: var(--text-muted); margin-bottom: 22px; }
+
+label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+    margin-top: 14px;
+}
+
+input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    background: var(--surface);
+    font-family: inherit;
+    color: var(--text);
+    transition: border-color .15s, box-shadow .15s;
+}
+input::placeholder { color: var(--text-subtle); }
+input:focus {
+    outline: none;
+    border-color: var(--brand);
+    background: var(--surface);
+    box-shadow: 0 0 0 3px rgba(234,88,12,0.1);
+}
+
+.btn-main {
+    width: 100%;
+    padding: 12px;
+    background: var(--brand);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 22px;
+    font-family: inherit;
+    transition: background .15s;
+}
+.btn-main:hover:not(:disabled) { background: var(--brand-hover); }
+.btn-main:disabled { opacity: 0.6; cursor: wait; }
+
+.alert {
+    padding: 11px 14px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 14px;
+    font-size: 13.5px;
+    display: none;
+    border: 1px solid transparent;
+}
+.alert.show { display: block; }
+.alert.error   { background: var(--danger-soft);  color: #B91C1C; border-color: #FCA5A5; }
+.alert.success { background: var(--success-soft); color: #047857; border-color: #6EE7B7; }
+
+.footer {
+    text-align: center;
+    color: var(--text-subtle);
+    font-size: 12px;
+    margin-top: 22px;
+}
+.footer .flag-tag { background: transparent; border-color: var(--border); }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="logo">
+        <div class="logo-icon"><i data-lucide="home" class="lucide-i"></i></div>
+        <div class="logo-text">warm.ge</div>
+        <div class="logo-sub">საქართველოს უძრავი ქონების CRM</div>
+    </div>
+
+    <div class="card">
+        <div class="tabs">
+            <button type="button" class="tab active" id="tab-login">შესვლა</button>
+            <button type="button" class="tab" id="tab-register">რეგისტრაცია</button>
+        </div>
+
+        <div class="alert" id="alert"></div>
+
+        <!-- LOGIN -->
+        <div class="form active" id="form-login">
+            <h2>მოგესალმები</h2>
+            <div class="subtitle">შედი შენს ანგარიშში</div>
+
+            <label>ელ. ფოსტა</label>
+            <input type="email" id="login-email" placeholder="email@warm.ge">
+
+            <label>პაროლი</label>
+            <input type="password" id="login-password" placeholder="••••••••">
+
+            <button type="button" class="btn-main" id="btn-login">შესვლა</button>
+        </div>
+
+        <!-- REGISTER -->
+        <div class="form" id="form-register">
+            <h2>დარეგისტრირდი <i data-lucide="rocket" class="lucide-i"></i></h2>
+            <div class="subtitle">შექმენი შენი სააგენტო</div>
+
+            <label>სახელი და გვარი</label>
+            <input type="text" id="reg-name" placeholder="სახელი გვარი">
+
+            <label>სააგენტოს სახელი</label>
+            <input type="text" id="reg-company" placeholder="სააგენტო">
+
+            <label>ელ. ფოსტა</label>
+            <input type="email" id="reg-email" placeholder="email@email.com">
+
+            <label>ტელეფონი</label>
+            <input type="tel" id="reg-phone" placeholder="+995 5XX XXX XXX">
+
+            <label>პაროლი (მინ. 6 სიმბოლო)</label>
+            <input type="password" id="reg-password" placeholder="••••••••">
+
+            <button type="button" class="btn-main" id="btn-register">დარეგისტრირდი</button>
+        </div>
+    </div>
+
+    <div class="footer">© 2026 warm.ge <span class="flag-tag">KA</span></div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://mqibuuxxokiomsmidbmz.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_ZK77l2lbh2G_ebmt3qC1KA_-QJ6ioKk';
+
+let client;
+
+window.addEventListener('load', () => {
+    client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    document.getElementById('tab-login').addEventListener('click', () => switchTab('login'));
+    document.getElementById('tab-register').addEventListener('click', () => switchTab('register'));
+    
+    document.getElementById('btn-login').addEventListener('click', doLogin);
+    document.getElementById('btn-register').addEventListener('click', doRegister);
+    
+    document.getElementById('login-password').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') doLogin();
+    });
+    document.getElementById('reg-password').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') doRegister();
+    });
+});
+
+function switchTab(name) {
+    document.getElementById('tab-login').classList.remove('active');
+    document.getElementById('tab-register').classList.remove('active');
+    document.getElementById('form-login').classList.remove('active');
+    document.getElementById('form-register').classList.remove('active');
+    
+    document.getElementById('tab-' + name).classList.add('active');
+    document.getElementById('form-' + name).classList.add('active');
+    
+    hideAlert();
+}
+
+function showAlert(msg, type) {
+    const a = document.getElementById('alert');
+    a.textContent = msg;
+    a.className = 'alert show ' + (type || 'error');
+    if (type === 'success') {
+        setTimeout(() => a.classList.remove('show'), 5000);
+    }
+}
+
+function hideAlert() {
+    document.getElementById('alert').classList.remove('show');
+}
+
+async function doLogin() {
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+    
+    if (!email || !password) {
+        showAlert('შეავსე ელ. ფოსტა და პაროლი');
+        return;
+    }
+    
+    const btn = document.getElementById('btn-login');
+    btn.disabled = true;
+    btn.textContent = 'მუშავდება...';
+    
+    try {
+        const result = await client.auth.signInWithPassword({ email, password });
+        
+        if (result.error) {
+            let msg = result.error.message;
+            if (msg.includes('Invalid login')) msg = 'არასწორი ელ. ფოსტა ან პაროლი';
+            if (msg.includes('Email not confirmed')) msg = 'ჯერ დაადასტურე ფოსტა';
+            showAlert(msg);
+            btn.disabled = false;
+            btn.textContent = 'შესვლა';
+            return;
+        }
+        
+        showAlert('მოგესალმები!', 'success');
+        setTimeout(() => { window.location.href = '/app'; }, 800);
+        
+    } catch (e) {
+        showAlert('შეცდომა: ' + e.message);
+        btn.disabled = false;
+        btn.textContent = 'შესვლა';
+    }
+}
+
+async function doRegister() {
+    const name = document.getElementById('reg-name').value.trim();
+    const company = document.getElementById('reg-company').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const phone = document.getElementById('reg-phone').value.trim();
+    const password = document.getElementById('reg-password').value;
+    
+    if (!name || !company || !email || !password) {
+        showAlert('შეავსე ყველა ველი');
+        return;
+    }
+    
+    if (password.length < 6) {
+        showAlert('პაროლი მინ. 6 სიმბოლო');
+        return;
+    }
+    
+    const btn = document.getElementById('btn-register');
+    btn.disabled = true;
+    btn.textContent = 'მუშავდება...';
+    
+    try {
+        // 1. Auth signup
+        const authResult = await client.auth.signUp({ email: email, password: password });
+        
+        if (authResult.error) {
+            let msg = authResult.error.message;
+            if (msg.includes('already registered')) msg = 'ეს ფოსტა უკვე დარეგისტრირებულია';
+            showAlert(msg);
+            btn.disabled = false;
+            btn.textContent = 'დარეგისტრირდი';
+            return;
+        }
+        
+        if (!authResult.data.user) {
+            showAlert('შეცდომა — auth user არ შეიქმნა');
+            btn.disabled = false;
+            btn.textContent = 'დარეგისტრირდი';
+            return;
+        }
+        
+        // 2. Create company
+        const companyResult = await client
+            .from('companies')
+            .insert({ name: company, email: email, phone: phone })
+            .select()
+            .single();
+        
+        if (companyResult.error) {
+            showAlert('კომპანია ვერ შეიქმნა: ' + companyResult.error.message);
+            btn.disabled = false;
+            btn.textContent = 'დარეგისტრირდი';
+            return;
+        }
+        
+        // 3. Create user
+        const nameParts = name.split(' ');
+        const firstName = nameParts[0];
+        const lastName = nameParts.slice(1).join(' ') || null;
+        
+        const userResult = await client
+            .from('users')
+            .insert({
+                auth_user_id: authResult.data.user.id,
+                company_id: companyResult.data.id,
+                first_name: firstName,
+                last_name: lastName,
+                email: email,
+                phone: phone,
+                role: 'FOUNDER'
+            });
+        
+        if (userResult.error) {
+            showAlert('user ვერ შეიქმნა: ' + userResult.error.message);
+            btn.disabled = false;
+            btn.textContent = 'დარეგისტრირდი';
+            return;
+        }
+        
+        showAlert('წარმატებით დარეგისტრირდი!', 'success');
+        setTimeout(() => { window.location.href = '/app'; }, 1500);
+        
+    } catch (e) {
+        showAlert('შეცდომა: ' + e.message);
+        btn.disabled = false;
+        btn.textContent = 'დარეგისტრირდი';
+    }
+}
+
+function renderLucide(){
+    if (window.lucide && typeof window.lucide.createIcons==='function') {
+        try { window.lucide.createIcons(); } catch(e){}
+    }
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', renderLucide);
+else renderLucide();
+
+</script>
+
+</body>
+</html>
