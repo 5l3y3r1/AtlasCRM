@@ -11,15 +11,6 @@ npm run seed     # one-time: creates the demo company + login
 npm start        # runs the server on http://localhost:3000
 ```
 
-Open **http://localhost:3000** in your browser and log in with:
-
-| email             | password   | role         |
-|-------------------|------------|--------------|
-| `beso@prime.ge`   | `warm123`  | FOUNDER      |
-| `nino@prime.ge`   | `warm123`  | AGENT        |
-| `giorgi@prime.ge` | `warm123`  | AGENT        |
-| `tamar@prime.ge`  | `warm123`  | MANAGER      |
-
 ## What's inside
 
 ### Sidebar pages (every one is wired up to live data)
