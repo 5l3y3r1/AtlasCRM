@@ -116,17 +116,8 @@ app.use('/api/export', exportRoutes);
 app.use('/api/billing', billingRoutes);
 
 // ─── File upload (used by add-listing photo uploader, deal documents, etc.)
-let actualUploadsDir = process.env.UPLOADS_DIR || path.join(__dirname, 'uploads');
-try {
-  fs.mkdirSync(actualUploadsDir, { recursive: true });
-} catch (e) {
-  // Fallback to /tmp if the original path is not writable (e.g., on Vercel)
-  const fallbackUploadsDir = path.join('/tmp', 'uploads');
-  console.warn(`[upload] Failed to create directory at ${actualUploadsDir}: ${e.message}. Falling back to ${fallbackUploadsDir}`);
-  actualUploadsDir = fallbackUploadsDir;
-  fs.mkdirSync(actualUploadsDir, { recursive: true });
-}
-const uploadsDir = actualUploadsDir;
+const uploadsDir = process.env.UPLOADS_DIR || path.join(__dirname, 'uploads');
+fs.mkdirSync(uploadsDir, { recursive: true });
 // Files are filed under <company>/<YYYY-MM>/ at the moment they arrive. Writing
 // everything flat into one directory is what produced the pile this had to be
 // dug out of (see scripts/uploads.js) — the layout has to be maintained on the
