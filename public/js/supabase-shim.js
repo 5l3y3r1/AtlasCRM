@@ -4,7 +4,7 @@
  * Exposes:  window.supabase.createClient(url, key)
  *
  * The returned client supports the subset of the Supabase SDK that the
- * warm.ge frontend uses:
+ * AtlasCRM frontend uses:
  *
  *   client.auth.signUp({ email, password })
  *   client.auth.signInWithPassword({ email, password })

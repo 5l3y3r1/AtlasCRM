@@ -3,26 +3,32 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>warm.ge · ობიექტის დამატება</title>
+<title>AtlasCRM · ობიექტის დამატება</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/img/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="/js/lucide.min.js"></script>
+<script src="/js/lucide.min.js?v=1"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.0.0/mapbox-gl.css" rel="stylesheet">
 
 <style>
   /* ════════════════════════════════════════════════════════════════
-   warm.ge — Production design system
+   AtlasCRM — Production design system
    Single source of truth for colours, typography, icons.
    ════════════════════════════════════════════════════════════════ */
 
 :root {
     /* Brand */
-    --brand:           #EA580C;   /* solid warm orange */
-    --brand-hover:     #C2410C;
-    --brand-soft:      #FFF7ED;
-    --brand-soft-2:    #FFEDD5;
-    --brand-border:    #FED7AA;
+    --brand:           #1D4ED8;   /* ember terracotta */
+    --brand-hover:     #1E3A8A;
+    --brand-soft:      #EFF6FF;
+    --brand-soft-2:    #DBEAFE;
+    --brand-border:    #BFDBFE;
 
     /* Surfaces */
     --bg:              #F8FAFC;
@@ -190,7 +196,7 @@
     border-radius: var(--radius);
     display: flex; align-items: center; justify-content: center;
     color: white;
-    box-shadow: 0 4px 10px rgba(234,88,12,0.3);
+    box-shadow: 0 4px 10px rgba(29, 78, 216,0.3);
   }
   .logo-icon .lucide-i, .logo-icon [data-lucide] { font-size: 22px; }
 
@@ -265,7 +271,8 @@
     font-weight: 600;
   }
 
-  .field-label .required { color: var(--danger); margin-left: 2px; }
+  .field-label .required { color: #EF4444 !important; margin-left: 2px; font-weight: 700; }
+  span.required { color: #EF4444 !important; font-weight: 700; }
 
   .input, .select, .textarea {
     background: var(--surface);
@@ -282,7 +289,7 @@
   .input:focus, .select:focus, .textarea:focus {
     outline: none;
     border-color: var(--brand);
-    box-shadow: 0 0 0 3px rgba(234,88,12,0.1);
+    box-shadow: 0 0 0 3px rgba(29, 78, 216,0.1);
     background: var(--surface);
   }
 
@@ -503,7 +510,49 @@
     .form-grid { grid-template-columns: 1fr; }
     .form-grid-3 { grid-template-columns: 1fr; }
     .checkbox-grid { grid-template-columns: 1fr 1fr; }
+    input, select, textarea { font-size: 16px !important; } /* prevent iOS zoom */
+    .container { padding: 14px; }
+    #map-picker { height: 280px !important; }
   }
+
+  /* ── Map picker ── */
+  #map-picker {
+    width: 100%;
+    height: 320px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  #map-picker-status {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 20px;
+  }
+  #map-picker-status.found { color: var(--success); }
+  #map-picker-status.searching { color: var(--brand); }
+  #geocode-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: var(--brand-soft);
+    color: var(--brand);
+    border: 1px solid var(--brand-border);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background .15s;
+    margin-top: 8px;
+  }
+  #geocode-btn:hover { background: var(--brand-soft-2); }
+  .mapboxgl-popup-content { font-family: var(--font-sans); padding: 10px 12px; font-size: 13px; }
 </style>
 </head>
 <body>
@@ -516,7 +565,7 @@
     <div class="logo-icon"><i data-lucide="home" class="lucide-i"></i></div>
     <div>
       <h1>ობიექტის დამატება</h1>
-      <div class="subtitle">warm.ge · CRM</div>
+      <div class="subtitle">AtlasCRM · CRM</div>
     </div>
   </div>
 
@@ -538,12 +587,12 @@
 
       <div class="form-grid">
         <div class="field full-width">
-          <label class="field-label">სათაური <span class="required">*</span></label>
+          <label class="field-label">სათაური <span class="required" style="color:#EF4444;font-weight:700">*</span></label>
           <input class="input" id="title" type="text" placeholder="მაგ: ვაკეში თანამედროვე ბინა" required />
         </div>
 
         <div class="field">
-          <label class="field-label">გარიგების ტიპი <span class="required">*</span></label>
+          <label class="field-label">გარიგების ტიპი <span class="required" style="color:#EF4444;font-weight:700">*</span></label>
           <div class="toggle-group">
             <button type="button" class="toggle-btn active" data-deal-type="SALE"><i data-lucide="home" class="lucide-i"></i> გასაყიდი</button>
             <button type="button" class="toggle-btn" data-deal-type="RENT"><i data-lucide="key" class="lucide-i"></i> გაქირავება</button>
@@ -551,9 +600,10 @@
         </div>
 
         <div class="field">
-          <label class="field-label">ქონების ტიპი <span class="required">*</span></label>
-          <select class="select" id="property-type" required>
-            <option value="RESIDENTIAL">საცხოვრებელი</option>
+          <label class="field-label">ქონების ტიპი <span class="required" style="color:#EF4444;font-weight:700">*</span></label>
+          <select class="select" id="property-type" required onchange="updatePropertyTypeSections()">
+            <option value="RESIDENTIAL">საცხოვრებელი (ბინა)</option>
+            <option value="HOUSE">კერძო სახლი</option>
             <option value="COMMERCIAL">კომერციული</option>
             <option value="LAND">მიწა</option>
             <option value="MULTI_FAMILY">მრავალბინიანი</option>
@@ -561,9 +611,24 @@
           </select>
         </div>
 
+        <!-- Exclusive + vacation checkboxes -->
+        <div class="field">
+          <label class="field-label">სტატუსი</label>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:6px">
+            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:14px">
+              <input type="checkbox" id="is-exclusive" style="width:18px;height:18px;accent-color:var(--brand);cursor:pointer">
+              <span><strong style="color:var(--brand)">★ ექსკლუზიური</strong> ობიექტი</span>
+            </label>
+            <label id="vacation-home-row" style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:14px">
+              <input type="checkbox" id="is-vacation-home" style="width:18px;height:18px;accent-color:var(--brand);cursor:pointer">
+              <span>სააგარაკე / საზაფხულო სახლი</span>
+            </label>
+          </div>
+        </div>
+
         <div class="field full-width">
-          <label class="field-label">აღწერა</label>
-          <textarea class="textarea" id="public-remarks" placeholder="დეტალური აღწერა — რემონტი, ხედი, თავისებურებები..."></textarea>
+          <label class="field-label">აღწერა / კომენტარი</label>
+          <textarea class="textarea" id="public-remarks" rows="4" placeholder="დეტალური აღწერა — რემონტი, ხედი, თავისებურებები, დამატებითი ინფო..."></textarea>
         </div>
       </div>
     </div>
@@ -575,14 +640,14 @@
 
       <div class="form-grid-3">
         <div class="field">
-          <label class="field-label">რეგიონი <span class="required">*</span></label>
+          <label class="field-label">რეგიონი <span class="required" style="color:#EF4444;font-weight:700">*</span></label>
           <select class="select" id="region-select" required>
             <option value="">იტვირთება...</option>
           </select>
         </div>
 
         <div class="field">
-          <label class="field-label">ქალაქი <span class="required">*</span></label>
+          <label class="field-label">ქალაქი <span class="required" style="color:#EF4444;font-weight:700">*</span></label>
           <select class="select" id="city-select" disabled required>
             <option value="">ჯერ რეგიონი აირჩიე</option>
           </select>
@@ -601,7 +666,7 @@
         </div>
 
         <div class="field">
-          <label class="field-label">საკადასტრო კოდი <span class="required">*</span></label>
+          <label class="field-label">საკადასტრო კოდი <span class="required" style="color:#EF4444;font-weight:700">*</span></label>
           <input class="input" id="cadastral-code" type="text" placeholder="01.14.05.001.123" required />
           <div class="field-helper">უნიკალური უნდა იყოს — ერთი კოდი ერთხელ</div>
         </div>
@@ -615,17 +680,26 @@
           <label class="field-label">Longitude</label>
           <input class="input" id="longitude" type="number" step="0.0000001" placeholder="44.7764" />
         </div>
-      </div>
-    </div>
 
-    <!-- ═══ ფინანსები ═══ -->
+        <!-- MAP PICKER -->
+        <div class="field full-width" style="margin-top:4px">
+          <label class="field-label"><i data-lucide="map-pin" class="lucide-i"></i> მდებარეობა რუკაზე</label>
+          <button type="button" id="geocode-btn">
+            <i data-lucide="search" class="lucide-i"></i> მისამართით მოძებნა
+          </button>
+          <div id="map-picker"></div>
+          <div id="map-picker-status">პინი ჩამოაგდე ზუსტ მდებარეობაზე, ან მისამართის მიხედვით მოძებნე</div>
+        </div>
+
+      </div><!-- /form-grid-3 -->
+    </div><!-- /form-section location -->
     <div class="form-section">
       <div class="section-title"><i data-lucide="dollar-sign" class="lucide-i"></i> ფინანსები</div>
       <div class="section-desc">ფასი და საკომისიო</div>
 
       <div class="form-grid" id="sale-fields">
         <div class="field">
-          <label class="field-label">ფასი ($) <span class="required">*</span></label>
+          <label class="field-label">ფასი ($) <span class="required" style="color:#EF4444;font-weight:700">*</span></label>
           <div class="input-with-prefix">
             <span class="input-prefix">$</span>
             <input class="input" id="list-price" type="number" min="0" placeholder="185000" required />
@@ -646,7 +720,7 @@
 
       <div class="form-grid" id="rent-fields" style="display: none;">
         <div class="field">
-          <label class="field-label">თვის ქირა ($) <span class="required">*</span></label>
+          <label class="field-label">თვის ქირა ($) <span class="required" style="color:#EF4444;font-weight:700">*</span></label>
           <div class="input-with-prefix">
             <span class="input-prefix">$</span>
             <input class="input" id="rental-monthly" type="number" min="0" placeholder="1200" />
@@ -654,7 +728,7 @@
         </div>
 
         <div class="field">
-          <label class="field-label">კონტრაქტი (თვე) <span class="required">*</span></label>
+          <label class="field-label">კონტრაქტი (თვე) <span class="required" style="color:#EF4444;font-weight:700">*</span></label>
           <input class="input" id="rental-months" type="number" min="1" max="120" placeholder="12" />
           <div class="field-helper">საკომისიო: თვის_ქირა × (თვეები/12)</div>
         </div>
@@ -674,7 +748,7 @@
 
       <div class="form-grid-3">
         <div class="field">
-          <label class="field-label">საცხოვრებელი ფართი (მ²) <span class="required">*</span></label>
+          <label class="field-label">საცხოვრებელი ფართი (მ²) <span class="required" style="color:#EF4444;font-weight:700">*</span></label>
           <input class="input" id="living-area" type="number" min="1" placeholder="95" required />
         </div>
 
@@ -732,6 +806,155 @@
             <div class="checkbox-icon"></div>
             <span class="checkbox-label"><i data-lucide="trees" class="lucide-i"></i> ბაღი</span>
           </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ პარკინგი ═══ -->
+    <div class="form-section">
+      <div class="section-title"><i data-lucide="car" class="lucide-i"></i> პარკინგი</div>
+      <div class="section-desc">სტოიანკა / ავტოფარეხი</div>
+      <div class="form-grid">
+        <div class="field">
+          <label class="field-label">პარკინგი</label>
+          <div style="display:flex;gap:10px;margin-top:6px">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px">
+              <input type="radio" name="parking-avail" id="parking-yes" value="1" style="accent-color:var(--brand)">
+              <span>კი</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px">
+              <input type="radio" name="parking-avail" id="parking-no" value="0" checked style="accent-color:var(--brand)">
+              <span>არა</span>
+            </label>
+          </div>
+        </div>
+        <div class="field" id="parking-type-row" style="display:none">
+          <label class="field-label">პარკინგის ტიპი</label>
+          <select class="select" id="parking-type">
+            <option value="">— აირჩიე —</option>
+            <option value="GARAGE">ავტოფარეხი (Garage)</option>
+            <option value="COVERED">სახურავქვეშ (Covered)</option>
+            <option value="OPEN">ღია (Open)</option>
+            <option value="STREET">ქუჩის პარკინგი (Street)</option>
+            <option value="OTHER">სხვა</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ კერძო სახლი — დამატებითი ველები ═══ -->
+    <div class="form-section" id="house-section">
+      <div class="section-title"><i data-lucide="trees" class="lucide-i"></i> კერძო სახლი — დამატებითი ველები</div>
+      <div class="section-desc" style="color:#1D4ED8">⬆ მხოლოდ "კერძო სახლი" ტიპისთვის</div>
+      <div class="form-grid">
+        <div class="field">
+          <label class="field-label">მიწის ნაკვეთი (მ²)</label>
+          <input class="input" id="land-area" type="number" min="1" placeholder="500" />
+        </div>
+        <div class="field">
+          <label class="field-label">აუზი</label>
+          <div style="display:flex;gap:10px;margin-top:6px">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px">
+              <input type="radio" name="pool-avail" id="pool-yes" value="1" style="accent-color:var(--brand)">
+              <span>კი</span>
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:14px">
+              <input type="radio" name="pool-avail" id="pool-no" value="0" checked style="accent-color:var(--brand)">
+              <span>არა</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ მიწა — დამატებითი ველები ═══ -->
+    <div class="form-section" id="land-section">
+      <div class="section-title"><i data-lucide="map" class="lucide-i"></i> მიწის ნაკვეთი — დამატებითი ველები</div>
+      <div class="section-desc" style="color:#1D4ED8">⬆ მხოლოდ "მიწა" ტიპისთვის</div>
+      <div class="form-grid">
+        <div class="field">
+          <label class="field-label">მიწის ფართი (მ²) <span class="required" style="color:#EF4444;font-weight:700">*</span></label>
+          <input class="input" id="land-area-land" type="number" min="1" placeholder="1000" />
+        </div>
+        <div class="field">
+          <label class="field-label">ფასი მ²-ზე ($)</label>
+          <div class="calculated" id="land-price-per-sqm" style="height:42px;display:flex;align-items:center">
+            <i data-lucide="calculator" class="lucide-i"></i> ავტომატური გამოთვლა
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label">კოეფიციენტი</label>
+          <select class="select" id="land-coefficient">
+            <option value="">— აირჩიე —</option>
+            <option value="K1">K1</option>
+            <option value="K2">K2</option>
+            <option value="K3">K3</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label">მიწის დანიშნულება</label>
+          <select class="select" id="land-purpose">
+            <option value="">— აირჩიე —</option>
+            <option value="AGRICULTURAL">სასოფლო-სამეურნეო</option>
+            <option value="RESIDENTIAL">საცხოვრებელი განაშენიანება</option>
+            <option value="COMMERCIAL">კომერციული განაშენიანება</option>
+            <option value="INDUSTRIAL">სამრეწველო</option>
+            <option value="RECREATIONAL">დასასვენებელი / რეკრეაციული</option>
+            <option value="MIXED">შერეული დანიშნულება</option>
+            <option value="FOREST">სატყეო ფონდი</option>
+            <option value="OTHER">სხვა</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label">ფუნქციური ზონა</label>
+          <select class="select" id="functional-zone">
+            <option value="">— აირჩიე —</option>
+            <option value="A1">A1 — ინდივიდუალური საცხოვრებელი</option>
+            <option value="A2">A2 — მცირე სართულიანი მრავალბ.</option>
+            <option value="A3">A3 — საშ. სართულიანი მრავალბ.</option>
+            <option value="A4">A4 — მაღალი სართულიანი მრავალბ.</option>
+            <option value="B1">B1 — სასაზღვრო კომერციული</option>
+            <option value="B2">B2 — ზოგადი კომერციული</option>
+            <option value="B3">B3 — ცენტრალური კომერციული</option>
+            <option value="C1">C1 — სამრეწველო</option>
+            <option value="D1">D1 — სპეციალური</option>
+            <option value="E1">E1 — სარეკრეაციო / სასაფლაო</option>
+            <option value="OTHER">სხვა</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label">გზის ტიპი</label>
+          <select class="select" id="land-road-type">
+            <option value="">— აირჩიე —</option>
+            <option value="ASPHALT">ასფალტი</option>
+            <option value="GRAVEL">სილა / ხრეში</option>
+            <option value="DIRT">მიწის გზა</option>
+            <option value="CONCRETE">ბეტონი</option>
+            <option value="OTHER">სხვა</option>
+          </select>
+        </div>
+        <div class="field full-width">
+          <label class="field-label">კომუნიკაციები</label>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:8px">
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
+              <input type="checkbox" id="comm-electricity" style="accent-color:var(--brand)"> ელექტრო
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
+              <input type="checkbox" id="comm-water" style="accent-color:var(--brand)"> წყალი
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
+              <input type="checkbox" id="comm-gas" style="accent-color:var(--brand)"> ბუნებრივი გაზი
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
+              <input type="checkbox" id="comm-sewerage" style="accent-color:var(--brand)"> კანალიზაცია
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
+              <input type="checkbox" id="comm-internet" style="accent-color:var(--brand)"> ინტერნეტი
+            </label>
+            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
+              <input type="checkbox" id="comm-other" style="accent-color:var(--brand)"> სხვა
+            </label>
+          </div>
         </div>
       </div>
     </div>
@@ -796,6 +1019,27 @@ let state = {
   cities: [],
   districts: []
 };
+
+// Show/hide conditional sections based on property type
+function updatePropertyTypeSections() {
+  const pt = document.getElementById('property-type').value;
+  const houseSection = document.getElementById('house-section');
+  const landSection = document.getElementById('land-section');
+  const vacationRow = document.getElementById('vacation-home-row');
+  if (houseSection) houseSection.style.display = (pt === 'HOUSE' || pt === '') ? '' : 'none';
+  if (landSection) landSection.style.display = (pt === 'LAND' || pt === '') ? '' : 'none';
+  if (vacationRow) vacationRow.style.display = pt === 'HOUSE' ? 'flex' : 'none';
+}
+// Run on load to set initial state
+updatePropertyTypeSections();
+
+// Parking toggle
+document.querySelectorAll('[name="parking-avail"]').forEach(r => {
+  r.addEventListener('change', () => {
+    document.getElementById('parking-type-row').style.display =
+      document.getElementById('parking-yes').checked ? '' : 'none';
+  });
+});
 
 // ═══════════════════════════════════════════════════════════════
 // <i data-lucide="rocket" class="lucide-i"></i> LOAD DATA
@@ -923,6 +1167,26 @@ function updateRentCalc() {
 document.getElementById('rental-monthly').addEventListener('input', updateRentCalc);
 document.getElementById('rental-months').addEventListener('input', updateRentCalc);
 
+// Land: auto price per m²
+function updateLandPricePerSqm() {
+  const price = parseFloat(document.getElementById('list-price')?.value) || 0;
+  const area  = parseFloat(document.getElementById('land-area-land')?.value) || 0;
+  const el = document.getElementById('land-price-per-sqm');
+  if (!el) return;
+  if (price > 0 && area > 0) {
+    el.innerHTML = `<i data-lucide="calculator" class="lucide-i"></i> <strong>$${(price / area).toFixed(1)}</strong> / მ²`;
+    if (window.lucide) try { window.lucide.createIcons(); } catch(e) {}
+  } else {
+    el.innerHTML = '<i data-lucide="calculator" class="lucide-i"></i> ავტომატური გამოთვლა';
+  }
+}
+document.getElementById('list-price')?.addEventListener('input', updateLandPricePerSqm);
+document.querySelector('#land-area-land')?.addEventListener?.('input', updateLandPricePerSqm);
+// Use event delegation for dynamically shown fields
+document.addEventListener('input', e => {
+  if (e.target.id === 'land-area-land') updateLandPricePerSqm();
+});
+
 // ═══════════════════════════════════════════════════════════════
 // <i data-lucide="save" class="lucide-i"></i> SUBMIT
 // ═══════════════════════════════════════════════════════════════
@@ -960,8 +1224,14 @@ document.getElementById('listing-form').addEventListener('submit', async (e) => 
       agency_id: state.agencyId,
       status: 'ACTIVE',
       title: document.getElementById('title').value.trim(),
-      public_remarks: document.getElementById('public-remarks').value.trim() || null,
+      description: document.getElementById('public-remarks').value.trim() || null,
       property_type: document.getElementById('property-type').value,
+      is_exclusive: document.getElementById('is-exclusive').checked ? 1 : 0,
+      is_vacation_home: document.getElementById('is-vacation-home').checked ? 1 : 0,
+
+      // Parking
+      parking_available: document.getElementById('parking-yes').checked ? 1 : 0,
+      parking_type: document.getElementById('parking-yes').checked ? (document.getElementById('parking-type').value || null) : null,
       
       // Geo
       region: region?.name_ka,
@@ -997,6 +1267,30 @@ document.getElementById('listing-form').addEventListener('submit', async (e) => 
       currency: 'USD'
     };
 
+    // House-specific
+    const pt = document.getElementById('property-type').value;
+    if (pt === 'HOUSE') {
+      data.land_area = parseFloat(document.getElementById('land-area').value) || null;
+      data.has_pool = document.getElementById('pool-yes').checked ? 1 : 0;
+    }
+
+    // Land-specific
+    if (pt === 'LAND') {
+      const landArea = parseFloat(document.getElementById('land-area-land').value) || null;
+      data.land_area = landArea;
+      data.living_area = landArea; // also store in living_area for filters
+      data.land_coefficient = document.getElementById('land-coefficient').value || null;
+      data.land_purpose = document.getElementById('land-purpose').value || null;
+      data.functional_zone = document.getElementById('functional-zone').value || null;
+      data.land_road_type = document.getElementById('land-road-type').value || null;
+      // Communications as JSON array
+      const comms = ['electricity','water','gas','sewerage','internet','other']
+        .filter(c => document.getElementById('comm-' + c).checked);
+      data.land_communications = comms.length ? JSON.stringify(comms) : null;
+      // Price per m²
+      if (landArea && data.list_price) data.price_per_sqm = data.list_price / landArea;
+    }
+
     // SALE vs RENT
     if (state.dealType === 'SALE') {
       data.list_price = parseFloat(document.getElementById('list-price').value);
@@ -1009,7 +1303,8 @@ document.getElementById('listing-form').addEventListener('submit', async (e) => 
     // ვაგზავნით Supabase-ში
     const result = await supabaseInsert('listings', data);
     
-    showSuccess(`<i data-lucide="check-circle-2" class="lucide-i"></i> წარმატებით დაემატა! ID: ${result[0].listing_key}`);
+    showSuccess(`<i data-lucide="check-circle-2" class="lucide-i"></i> წარმატებით დაემატა! ID: ${result[0]?.listing_number || result[0]?.listing_key || result[0]?.id?.slice(0,8)}`);
+
     
     // Form-ის გასუფთავება
     setTimeout(() => {
@@ -1054,6 +1349,155 @@ function showError(msg) {
 function hideAlerts() {
   document.getElementById('alert-success').classList.remove('show');
   document.getElementById('alert-error').classList.remove('show');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// MAP PICKER
+// ═══════════════════════════════════════════════════════════════
+const MAPBOX_TOKEN = 'pk.eyJ1IjoiMTIzNDU2NzEiLCJhIjoiY21vc2V4ank2MmoxNDJ4cjJuYjdvbXVsZCJ9.ZBHndhgY2XtF6EKFJYZPLQ';
+let pickerMap = null;
+let pickerMarker = null;
+
+function initMapPicker() {
+  mapboxgl.accessToken = MAPBOX_TOKEN;
+
+  pickerMap = new mapboxgl.Map({
+    container: 'map-picker',
+    style: 'mapbox://styles/mapbox/streets-v12',
+    center: [44.7833, 41.7167], // Tbilisi default
+    zoom: 11
+  });
+
+  pickerMap.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+  // Create draggable marker at centre on load
+  pickerMap.on('load', () => {
+    const center = pickerMap.getCenter();
+    pickerMarker = new mapboxgl.Marker({ color: '#1D4ED8', draggable: true })
+      .setLngLat([center.lng, center.lat])
+      .addTo(pickerMap);
+
+    // Don't pre-fill coords until user explicitly picks
+    pickerMarker.on('dragend', () => {
+      const lngLat = pickerMarker.getLngLat();
+      setCoords(lngLat.lat, lngLat.lng);
+      updateStatus('found', `<i data-lucide="check-circle-2" class="lucide-i"></i> კოორდინატები: ${lngLat.lat.toFixed(6)}, ${lngLat.lng.toFixed(6)}`);
+    });
+  });
+
+  // Click on map to move marker
+  pickerMap.on('click', (e) => {
+    const { lat, lng } = e.lngLat;
+    if (pickerMarker) pickerMarker.setLngLat([lng, lat]);
+    setCoords(lat, lng);
+    updateStatus('found', `<i data-lucide="check-circle-2" class="lucide-i"></i> კოორდინატები: ${lat.toFixed(6)}, ${lng.toFixed(6)}`);
+  });
+
+  // If lat/lng inputs already have values, position marker there
+  const lat = parseFloat(document.getElementById('latitude').value);
+  const lng = parseFloat(document.getElementById('longitude').value);
+  if (lat && lng) {
+    pickerMap.setCenter([lng, lat]);
+    pickerMap.setZoom(15);
+  }
+}
+
+function setCoords(lat, lng) {
+  document.getElementById('latitude').value = lat.toFixed(7);
+  document.getElementById('longitude').value = lng.toFixed(7);
+}
+
+function updateStatus(cls, html) {
+  const el = document.getElementById('map-picker-status');
+  el.className = 'map-picker-status ' + cls;
+  el.innerHTML = html;
+  if (window.lucide) try { window.lucide.createIcons(); } catch(e){}
+}
+
+async function geocodeAddress() {
+  const street = document.getElementById('street-address').value.trim();
+  const cityId = document.getElementById('city-select').value;
+  const regionId = document.getElementById('region-select').value;
+
+  // Build a human-readable query from available info
+  const cityObj = state.cities.find(c => c.id === cityId);
+  const regionObj = state.regions.find(r => r.id === regionId);
+  const parts = [street, cityObj?.name_ka, regionObj?.name_ka, 'საქართველო'].filter(Boolean);
+
+  if (parts.length < 2) {
+    updateStatus('', 'გთხოვ, ჯერ ქალაქი ან მისამართი შეიყვანე');
+    return;
+  }
+
+  const query = encodeURIComponent(parts.join(', '));
+  updateStatus('searching', '<i data-lucide="loader" class="lucide-i"></i> იძებნება...');
+  if (window.lucide) try { window.lucide.createIcons(); } catch(e){}
+
+  try {
+    const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?access_token=${MAPBOX_TOKEN}&country=ge&limit=1&language=ka`;
+    const res = await fetch(url);
+    const json = await res.json();
+
+    if (!json.features || json.features.length === 0) {
+      updateStatus('', '<i data-lucide="alert-circle" class="lucide-i"></i> მისამართი ვერ მოიძებნა — პინი ხელით გადაიტანე');
+      return;
+    }
+
+    const [lng, lat] = json.features[0].center;
+    const placeName = json.features[0].place_name;
+
+    // Move map and marker
+    pickerMap.flyTo({ center: [lng, lat], zoom: 16, speed: 1.4 });
+    if (pickerMarker) {
+      pickerMarker.setLngLat([lng, lat]);
+    } else {
+      pickerMarker = new mapboxgl.Marker({ color: '#1D4ED8', draggable: true })
+        .setLngLat([lng, lat])
+        .addTo(pickerMap);
+      pickerMarker.on('dragend', () => {
+        const ll = pickerMarker.getLngLat();
+        setCoords(ll.lat, ll.lng);
+        updateStatus('found', `<i data-lucide="check-circle-2" class="lucide-i"></i> კოორდინატები: ${ll.lat.toFixed(6)}, ${ll.lng.toFixed(6)}`);
+      });
+    }
+
+    setCoords(lat, lng);
+    updateStatus('found', `<i data-lucide="check-circle-2" class="lucide-i"></i> ${placeName}`);
+  } catch (err) {
+    updateStatus('', 'შეცდომა: ' + err.message);
+  }
+}
+
+// Wire up geocode button and Enter key on address field
+document.getElementById('geocode-btn').addEventListener('click', geocodeAddress);
+document.getElementById('street-address').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') { e.preventDefault(); geocodeAddress(); }
+});
+
+// Auto-geocode when city changes (helpful for city-level pin)
+document.getElementById('city-select').addEventListener('change', () => {
+  const street = document.getElementById('street-address').value.trim();
+  if (!street) geocodeAddress(); // only city-level if no street yet
+});
+
+// Keep lat/lng inputs in sync with manual edits → move map marker
+['latitude', 'longitude'].forEach(id => {
+  document.getElementById(id).addEventListener('change', () => {
+    const lat = parseFloat(document.getElementById('latitude').value);
+    const lng = parseFloat(document.getElementById('longitude').value);
+    if (lat && lng && pickerMap) {
+      pickerMap.flyTo({ center: [lng, lat], zoom: 15 });
+      if (pickerMarker) pickerMarker.setLngLat([lng, lat]);
+      updateStatus('found', `<i data-lucide="check-circle-2" class="lucide-i"></i> კოორდინატები: ${lat.toFixed(6)}, ${lng.toFixed(6)}`);
+    }
+  });
+});
+
+// Initialize picker after DOM ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initMapPicker);
+} else {
+  initMapPicker();
 }
 
 // ═══════════════════════════════════════════════════════════════

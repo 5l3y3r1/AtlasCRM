@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AtlasCRM — Platform Admin</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/img/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<style>
+  :root { --brand:#1D4ED8; --brand2:#1E3A8A; --ink:#1a1a2e; --muted:#6b7280; --line:#e5e7eb; --bg:#f5f6f8; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Inter',system-ui,Arial,sans-serif; background:var(--bg); color:var(--ink); }
+  .hide { display:none !important; }
+  button { font-family:inherit; cursor:pointer; }
+  .btn { border:none; border-radius:10px; padding:10px 16px; font-weight:600; font-size:14px; }
+  .btn-primary { background:var(--brand); color:#fff; }
+  .btn-primary:hover { background:var(--brand2); }
+  .btn-secondary { background:#fff; color:var(--ink); border:1px solid var(--line); }
+  .btn-danger { background:#ef4444; color:#fff; }
+  .btn-sm { padding:6px 10px; font-size:12px; border-radius:8px; }
+  input, select, textarea { font-family:inherit; font-size:14px; padding:10px 12px; border:1px solid var(--line); border-radius:10px; width:100%; background:#fff; }
+  label { font-size:12px; font-weight:600; color:var(--muted); display:block; margin-bottom:4px; }
+  .field { margin-bottom:12px; }
+  .row2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+  /* login */
+  #login { min-height:100vh; display:grid; place-items:center; }
+  .login-card { background:#fff; border:1px solid var(--line); border-radius:16px; padding:32px; width:360px; box-shadow:0 10px 40px rgba(0,0,0,.06); }
+  .brand-mark { font-size:22px; font-weight:800; color:var(--brand); margin-bottom:2px; }
+  .sub { color:var(--muted); font-size:13px; margin-bottom:20px; }
+  .err { color:#dc2626; font-size:13px; margin-top:8px; min-height:18px; }
+
+  /* app */
+  header { background:#fff; border-bottom:1px solid var(--line); padding:16px 24px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:5; }
+  .h-left { display:flex; align-items:center; gap:12px; }
+  .container { max-width:1200px; margin:0 auto; padding:24px; }
+  .toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px; flex-wrap:wrap; }
+  .search { max-width:280px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; }
+  .card { background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px; }
+  .card-head { display:flex; align-items:center; gap:12px; margin-bottom:12px; }
+  .logo { width:46px; height:46px; border-radius:11px; object-fit:cover; background:linear-gradient(135deg,var(--brand),var(--brand2)); display:grid; place-items:center; color:#fff; font-weight:800; font-size:18px; flex:none; }
+  .c-name { font-weight:700; font-size:15px; }
+  .c-founder { font-size:12px; color:var(--muted); }
+  .badges { display:flex; gap:6px; flex-wrap:wrap; margin:8px 0; }
+  .badge { font-size:11px; font-weight:700; padding:3px 9px; border-radius:20px; text-transform:capitalize; }
+  .b-active { background:#dcfce7; color:#166534; } .b-suspended,.b-expired,.b-cancelled { background:#fee2e2; color:#991b1b; }
+  .b-trial { background:#e0e7ff; color:#3730a3; } .b-basic { background:#f1f5f9; color:#334155; } .b-pro { background:#fef3c7; color:#92400e; } .b-enterprise { background:#ede9fe; color:#5b21b6; }
+  .stats { display:flex; gap:14px; font-size:12px; color:var(--muted); margin:10px 0; }
+  .stats b { color:var(--ink); font-size:14px; display:block; }
+  .card-actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:8px; }
+  .exp { font-size:12px; color:var(--muted); }
+
+  /* modal */
+  .overlay { position:fixed; inset:0; background:rgba(0,0,0,.45); display:grid; place-items:center; z-index:20; padding:20px; }
+  .modal { background:#fff; border-radius:16px; width:560px; max-width:100%; max-height:90vh; overflow:auto; padding:24px; }
+  .modal h2 { font-size:18px; margin-bottom:16px; }
+  .modal-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:18px; }
+  .success-box { background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:16px; }
+  .copy-row { display:flex; gap:8px; align-items:center; margin-top:8px; }
+  .copy-row input { font-family:monospace; font-size:13px; }
+  .users-table { width:100%; border-collapse:collapse; margin-top:8px; font-size:13px; }
+  .users-table th, .users-table td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--line); }
+  .muted { color:var(--muted); font-size:12px; }
+  .logo-preview { width:56px; height:56px; border-radius:12px; object-fit:cover; border:1px solid var(--line); }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="login-card">
+    <div class="brand-mark">AtlasCRM</div>
+    <div class="sub">Platform Administration</div>
+    <div class="field"><label>Email</label><input id="li-email" type="email" autocomplete="username"></div>
+    <div class="field"><label>Password</label><input id="li-pass" type="password" autocomplete="current-password"></div>
+    <button class="btn btn-primary" style="width:100%" onclick="doLogin()">Sign in</button>
+    <div class="err" id="li-err"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="hide">
+  <header>
+    <div class="h-left"><div class="brand-mark">AtlasCRM</div><span class="muted">Platform Admin</span></div>
+    <div class="h-left">
+      <span class="muted" id="me-email"></span>
+      <button class="btn btn-secondary btn-sm" onclick="logout()">Sign out</button>
+    </div>
+  </header>
+  <div class="container">
+    <div class="tabs" style="display:flex;gap:8px;margin-bottom:20px;border-bottom:1px solid var(--line)">
+      <button class="tab tab-active" id="tab-companies" onclick="switchTab('companies')" style="background:none;border:none;padding:10px 4px;margin-right:16px;font-size:15px;font-weight:600;color:var(--brand);border-bottom:2px solid var(--brand)">Companies</button>
+      <button class="tab" id="tab-messages" onclick="switchTab('messages')" style="background:none;border:none;padding:10px 4px;font-size:15px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent">Messages <span id="msg-badge" style="display:none;background:#ef4444;color:#fff;border-radius:20px;padding:1px 8px;font-size:12px;margin-left:4px"></span></button>
+    </div>
+
+    <div id="view-companies">
+      <div class="toolbar">
+        <div>
+          <div style="font-size:20px;font-weight:800">Companies</div>
+          <div class="muted" id="co-count"></div>
+        </div>
+        <div class="h-left">
+          <input class="search" id="search" placeholder="Search companies…" oninput="renderCompanies()">
+          <button class="btn btn-primary" onclick="openRegister()">+ Register Company</button>
+        </div>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+
+    <div id="view-messages" class="hide">
+      <div class="toolbar">
+        <div>
+          <div style="font-size:20px;font-weight:800">Contact messages</div>
+          <div class="muted" id="msg-count"></div>
+        </div>
+      </div>
+      <div id="msg-list"></div>
+    </div>
+  </div>
+</div>
+
+<div id="modal-root"></div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let COMPANIES = [], ME = null;
+
+async function api(path, opts = {}) {
+  const r = await fetch('/api/admin' + path, Object.assign({
+    headers: { 'Content-Type': 'application/json' }, credentials: 'include'
+  }, opts));
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error || ('HTTP ' + r.status));
+  return j.data;
+}
+
+// ── auth ──────────────────────────────────────────────────────────────
+async function checkSession() {
+  try {
+    const r = await fetch('/api/auth/session', { credentials: 'include' });
+    const j = await r.json();
+    const user = j.data && (j.data.user || j.data);
+    if (user && user.is_super_admin) { ME = user; return true; }
+  } catch (e) {}
+  return false;
+}
+async function doLogin() {
+  $('li-err').textContent = '';
+  try {
+    const r = await fetch('/api/auth/login', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include',
+      body: JSON.stringify({ email: $('li-email').value.trim(), password: $('li-pass').value })
+    });
+    const j = await r.json();
+    if (!r.ok) { $('li-err').textContent = j.error || 'Login failed'; return; }
+    const user = j.data.user;
+    if (!user.is_super_admin) { $('li-err').textContent = 'This account is not a platform administrator.'; return; }
+    ME = user; showApp();
+  } catch (e) { $('li-err').textContent = e.message; }
+}
+async function logout() {
+  await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }).catch(() => {});
+  location.reload();
+}
+function showApp() {
+  $('login').classList.add('hide'); $('app').classList.remove('hide');
+  $('me-email').textContent = ME.email || '';
+  loadCompanies();
+  loadMessages();
+}
+
+// ── companies ─────────────────────────────────────────────────────────
+async function loadCompanies() {
+  try { COMPANIES = await api('/companies'); renderCompanies(); }
+  catch (e) { alert('Failed to load companies: ' + e.message); }
+}
+function esc(s){ return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function initials(n){ return (n||'?').trim().slice(0,2).toUpperCase(); }
+function fmtDate(d){ if(!d) return '—'; try { return new Date(d).toLocaleDateString(); } catch(e){ return d; } }
+function _online(last){ const t = last ? Date.parse(last) : 0; const on = t && (Date.now()-t < 5*60*1000); return `<span style="display:inline-flex;align-items:center;gap:5px;color:${on?'#16a34a':'#94a3b8'}"><span style="width:8px;height:8px;border-radius:50%;background:${on?'#16a34a':'#cbd5e1'}"></span>${on?'ონლაინ':'ოფლაინ'}</span>`; }
+
+function renderCompanies() {
+  const q = ($('search').value || '').toLowerCase();
+  const list = COMPANIES.filter(c => !q ||
+    (c.name||'').toLowerCase().includes(q) ||
+    (c.founder && (c.founder.email||'').toLowerCase().includes(q)));
+  $('co-count').textContent = COMPANIES.length + ' total';
+  $('grid').innerHTML = list.map(c => `
+    <div class="card">
+      <div class="card-head">
+        ${c.logo_url ? `<img class="logo" src="${esc(c.logo_url)}" alt="">` : `<div class="logo">${initials(c.name)}</div>`}
+        <div style="min-width:0">
+          <div class="c-name">${esc(c.name)}</div>
+          <div class="c-founder">${c.founder ? esc(c.founder.email) : '<span class="muted">no founder</span>'}</div>
+        </div>
+      </div>
+      <div class="badges">
+        <span class="badge b-${esc(c.status)}">${esc(c.status)}</span>
+        <span class="badge b-${esc(c.plan||'trial')}">${esc(c.plan||'trial')}</span>
+      </div>
+      <div class="exp">Expires: ${fmtDate(c.subscription_expires_at)} · Joined ${fmtDate(c.created_at)}</div>
+      <div class="stats">
+        <div><b>${c.stats.users}</b>agents</div>
+        <div><b>${c.stats.listings}</b>listings</div>
+        <div><b>${c.stats.leads}</b>leads</div>
+      </div>
+      <div class="card-actions">
+        <button class="btn btn-secondary btn-sm" onclick="openDetail('${c.id}')">Details</button>
+        <button class="btn btn-secondary btn-sm" onclick="copyLoginUrl()">Copy login URL</button>
+        ${c.status === 'active'
+          ? `<button class="btn btn-danger btn-sm" onclick="toggleSuspend('${c.id}','suspend')">Suspend</button>`
+          : `<button class="btn btn-primary btn-sm" onclick="toggleSuspend('${c.id}','activate')">Activate</button>`}
+      </div>
+    </div>`).join('') || '<div class="muted">No companies yet. Click “Register Company”.</div>';
+}
+
+function copyLoginUrl() {
+  const url = location.origin + '/login';
+  navigator.clipboard.writeText(url).then(() => toast('Login URL copied: ' + url));
+}
+async function toggleSuspend(id, action) {
+  if (!confirm(action === 'suspend' ? 'Suspend this company? Its users will be locked out.' : 'Re-activate this company?')) return;
+  try { await api(`/companies/${id}/${action}`, { method: 'POST' }); loadCompanies(); }
+  catch (e) { alert(e.message); }
+}
+
+// ── modals ────────────────────────────────────────────────────────────
+function closeModal(){ $('modal-root').innerHTML = ''; }
+function modal(html){ $('modal-root').innerHTML = `<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal">${html}</div></div>`; }
+function toast(msg){ const d=document.createElement('div'); d.textContent=msg; d.style.cssText='position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:10px;z-index:50;font-size:14px'; document.body.appendChild(d); setTimeout(()=>d.remove(),2200); }
+
+function genPassword(){ const c='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789'; let p=''; for(let i=0;i<12;i++)p+=c[Math.floor(Math.random()*c.length)]; return p; }
+
+async function uploadLogo(file, cb) {
+  const fd = new FormData(); fd.append('files', file);
+  const r = await fetch('/api/upload', { method: 'POST', body: fd, credentials: 'include' });
+  const j = await r.json();
+  if (!r.ok || !j.data || !j.data[0]) throw new Error(j.error || 'upload failed');
+  cb(location.origin + j.data[0].url);
+}
+
+function openRegister() {
+  modal(`
+    <h2>Register Company</h2>
+    <div class="field"><label>Company name *</label><input id="r-name"></div>
+    <div class="field">
+      <label>Logo</label>
+      <div class="copy-row">
+        <img id="r-logo-prev" class="logo-preview hide">
+        <input id="r-logo-file" type="file" accept="image/*" onchange="onLogoPick(this)">
+      </div>
+      <input id="r-logo-url" type="hidden">
+    </div>
+    <div class="row2">
+      <div class="field"><label>Founder first name</label><input id="r-fname"></div>
+      <div class="field"><label>Founder last name</label><input id="r-lname"></div>
+    </div>
+    <div class="field"><label>Founder email *</label><input id="r-email" type="email"></div>
+    <div class="field"><label>Password *</label>
+      <div class="copy-row"><input id="r-pass"><button class="btn btn-secondary btn-sm" onclick="$('r-pass').value=genPassword()">Generate</button></div>
+    </div>
+    <div class="row2">
+      <div class="field"><label>Plan</label>
+        <select id="r-plan"><option value="trial">Trial</option><option value="basic">Basic</option><option value="pro">Pro</option><option value="enterprise">Enterprise</option></select>
+      </div>
+      <div class="field"><label>Subscription expires</label><input id="r-exp" type="date"></div>
+    </div>
+    <div class="err" id="r-err"></div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="submitRegister()">Create</button>
+    </div>
+  `);
+  $('r-pass').value = genPassword();
+}
+async function onLogoPick(input){
+  if (!input.files[0]) return;
+  try { await uploadLogo(input.files[0], (url) => { $('r-logo-url').value = url; const p=$('r-logo-prev'); p.src=url; p.classList.remove('hide'); }); }
+  catch (e) { alert('Logo upload failed: ' + e.message); }
+}
+async function submitRegister() {
+  $('r-err').textContent = '';
+  const body = {
+    name: $('r-name').value.trim(),
+    logo_url: $('r-logo-url').value || null,
+    plan: $('r-plan').value,
+    subscription_expires_at: $('r-exp').value || null,
+    founder: {
+      first_name: $('r-fname').value.trim(), last_name: $('r-lname').value.trim(),
+      email: $('r-email').value.trim(), password: $('r-pass').value
+    }
+  };
+  try {
+    const c = await api('/companies', { method: 'POST', body: JSON.stringify(body) });
+    modal(`
+      <h2>✓ Company created</h2>
+      <div class="success-box">
+        <div style="font-weight:700;margin-bottom:6px">${esc(c.name)}</div>
+        <div class="muted">Send these details to the company founder:</div>
+        <div class="field" style="margin-top:10px"><label>Login URL</label>
+          <div class="copy-row"><input readonly value="${esc(c.loginUrl)}"><button class="btn btn-secondary btn-sm" onclick="cp(this)">Copy</button></div></div>
+        <div class="field"><label>Email</label>
+          <div class="copy-row"><input readonly value="${esc(c.credentials.email)}"><button class="btn btn-secondary btn-sm" onclick="cp(this)">Copy</button></div></div>
+        <div class="field"><label>Password</label>
+          <div class="copy-row"><input readonly value="${esc(c.credentials.password)}"><button class="btn btn-secondary btn-sm" onclick="cp(this)">Copy</button></div></div>
+        <button class="btn btn-secondary btn-sm" onclick="cpAll('${esc(c.loginUrl)}','${esc(c.credentials.email)}','${esc(c.credentials.password)}')">Copy all</button>
+      </div>
+      <div class="modal-actions"><button class="btn btn-primary" onclick="closeModal()">Done</button></div>
+    `);
+    loadCompanies();
+  } catch (e) { $('r-err').textContent = e.message; }
+}
+function cp(btn){ const i=btn.previousElementSibling; navigator.clipboard.writeText(i.value); btn.textContent='✓'; setTimeout(()=>btn.textContent='Copy',900); }
+function cpAll(url,email,pass){ navigator.clipboard.writeText(`Login: ${url}\nEmail: ${email}\nPassword: ${pass}`); toast('All details copied'); }
+
+async function openDetail(id) {
+  let c;
+  try { c = await api('/companies/' + id); } catch (e) { alert(e.message); return; }
+  modal(`
+    <h2>${esc(c.name)}</h2>
+    <div class="card-head">
+      ${c.logo_url ? `<img class="logo" src="${esc(c.logo_url)}">` : `<div class="logo">${initials(c.name)}</div>`}
+      <div><div class="muted">Company ID</div><div class="muted" style="font-family:monospace">${esc(c.id)}</div></div>
+    </div>
+    <div class="stats"><div><b>${c.stats.users}</b>agents</div><div><b>${c.stats.listings}</b>listings</div><div><b>${c.stats.leads}</b>leads</div></div>
+
+    <div style="font-weight:700;margin:14px 0 6px">Subscription</div>
+    <div class="row2">
+      <div class="field"><label>Plan</label>
+        <select id="d-plan">${['trial','basic','pro','enterprise'].map(p=>`<option value="${p}" ${c.plan===p?'selected':''}>${p}</option>`).join('')}</select></div>
+      <div class="field"><label>Status</label>
+        <select id="d-status">${['active','suspended','expired','cancelled'].map(s=>`<option value="${s}" ${(c.subscription_status||'active')===s?'selected':''}>${s}</option>`).join('')}</select></div>
+    </div>
+    <div class="field"><label>Expires</label><input id="d-exp" type="date" value="${c.subscription_expires_at ? String(c.subscription_expires_at).slice(0,10) : ''}"></div>
+    <div class="field"><label>Admin notes</label><textarea id="d-notes" rows="2">${esc(c.admin_notes||'')}</textarea></div>
+
+    <div style="font-weight:700;margin:14px 0 6px">Contact</div>
+    <div class="row2">
+      <div class="field"><label>Email</label><input id="d-email" value="${esc(c.email||'')}"></div>
+      <div class="field"><label>Phone</label><input id="d-phone" value="${esc(c.phone||'')}"></div>
+    </div>
+
+    <div style="font-weight:700;margin:14px 0 6px">Users (${c.users.length})</div>
+    <table class="users-table"><tr><th>Name</th><th>Email</th><th>Role</th><th>Online</th><th>Active</th><th></th></tr>
+      ${c.users.map(u=>`<tr><td>${esc((u.first_name||'')+' '+(u.last_name||''))}</td><td>${esc(u.email)}</td><td>${esc(u.role)}</td><td>${_online(u.last_seen_at)}</td><td>${u.is_active?'✓':'—'}</td>
+        <td style="white-space:nowrap;text-align:right">
+          ${u.is_active?`<button class="btn btn-secondary btn-sm" title="დეაქტივაცია" onclick="adminUserAction('${u.id}','${esc((u.first_name||'')+' '+(u.last_name||'')).replace(/'/g,'')}','deactivate','${c.id}')">Off</button>`:''}
+          <button class="btn btn-danger btn-sm" title="სამუდამო წაშლა" onclick="adminUserAction('${u.id}','${esc((u.first_name||'')+' '+(u.last_name||'')).replace(/'/g,'')}','delete','${c.id}')">Delete</button>
+        </td></tr>`).join('')}
+    </table>
+
+    <div style="font-weight:700;margin:14px 0 6px">Founder access</div>
+    <button class="btn btn-secondary btn-sm" onclick="resetPass('${c.id}')">Reset founder password</button>
+
+    <div class="err" id="d-err"></div>
+    <div class="modal-actions">
+      <button class="btn btn-danger" style="margin-right:auto" onclick="adminDeleteCompany('${c.id}','${esc(c.name).replace(/'/g,'')}')">Delete company</button>
+      <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+      <button class="btn btn-primary" onclick="saveDetail('${c.id}')">Save changes</button>
+    </div>
+  `);
+}
+async function saveDetail(id) {
+  $('d-err').textContent = '';
+  const body = {
+    plan: $('d-plan').value, subscription_status: $('d-status').value,
+    subscription_expires_at: $('d-exp').value || null,
+    admin_notes: $('d-notes').value, email: $('d-email').value.trim(), phone: $('d-phone').value.trim()
+  };
+  try { await api('/companies/' + id, { method: 'PATCH', body: JSON.stringify(body) }); closeModal(); loadCompanies(); toast('Saved'); }
+  catch (e) { $('d-err').textContent = e.message; }
+}
+async function resetPass(id) {
+  const p = genPassword();
+  if (!confirm('Reset the founder password to a new value?')) return;
+  try {
+    const r = await api(`/companies/${id}/reset-password`, { method: 'POST', body: JSON.stringify({ password: p }) });
+    modal(`<h2>New password set</h2><div class="success-box">
+      <div class="field"><label>Email</label><div class="copy-row"><input readonly value="${esc(r.email)}"><button class="btn btn-secondary btn-sm" onclick="cp(this)">Copy</button></div></div>
+      <div class="field"><label>New password</label><div class="copy-row"><input readonly value="${esc(r.password)}"><button class="btn btn-secondary btn-sm" onclick="cp(this)">Copy</button></div></div>
+      </div><div class="modal-actions"><button class="btn btn-primary" onclick="closeModal()">Done</button></div>`);
+  } catch (e) { alert(e.message); }
+}
+
+// ── account deletion (super-admin) ──
+async function adminUserAction(userId, name, action, companyId) {
+  if (action === 'deactivate') {
+    if (!confirm(`Deactivate ${name}? They will be logged out but data is kept.`)) return;
+    try { await api('/users/' + userId, { method: 'DELETE' }); toast('User deactivated'); openDetail(companyId); loadCompanies(); }
+    catch (e) { alert(e.message); }
+  } else {
+    if (!confirm(`Permanently DELETE ${name}? Their clients/listings/deals will be unassigned. This cannot be undone.`)) return;
+    try { await api('/users/' + userId + '?hard=1', { method: 'DELETE' }); toast('User deleted'); openDetail(companyId); loadCompanies(); }
+    catch (e) { alert(e.message); }
+  }
+}
+
+async function adminDeleteCompany(id, name) {
+  if (!confirm(`Delete company "${name}"?\n\nThis permanently removes the company AND all of its users, clients, listings, deals, and data. This cannot be undone.`)) return;
+  const typed = prompt(`To confirm, type the company name exactly:\n${name}`);
+  if (typed !== name) { if (typed !== null) alert('Name did not match — cancelled.'); return; }
+  try { await api('/companies/' + id, { method: 'DELETE' }); closeModal(); toast('Company deleted'); loadCompanies(); }
+  catch (e) { alert(e.message); }
+}
+
+// ── messages ──────────────────────────────────────────────────────────
+let MESSAGES = [];
+function switchTab(which) {
+  const isCo = which === 'companies';
+  $('view-companies').classList.toggle('hide', !isCo);
+  $('view-messages').classList.toggle('hide', isCo);
+  const ct = $('tab-companies'), mt = $('tab-messages');
+  ct.style.color = isCo ? 'var(--brand)' : 'var(--muted)';
+  ct.style.borderBottomColor = isCo ? 'var(--brand)' : 'transparent';
+  mt.style.color = !isCo ? 'var(--brand)' : 'var(--muted)';
+  mt.style.borderBottomColor = !isCo ? 'var(--brand)' : 'transparent';
+  if (!isCo) loadMessages();
+}
+async function loadMessages() {
+  try {
+    const d = await api('/messages');
+    MESSAGES = d.messages || [];
+    const badge = $('msg-badge');
+    if (d.unread > 0) { badge.style.display = 'inline-block'; badge.textContent = d.unread; }
+    else badge.style.display = 'none';
+    renderMessages();
+  } catch (e) { $('msg-list').innerHTML = '<div class="muted">Failed to load: ' + esc(e.message) + '</div>'; }
+}
+function renderMessages() {
+  $('msg-count').textContent = MESSAGES.length + ' total';
+  if (!MESSAGES.length) { $('msg-list').innerHTML = '<div class="muted">No messages yet.</div>'; return; }
+  $('msg-list').innerHTML = MESSAGES.map(m => `
+    <div class="card" style="margin-bottom:12px;cursor:pointer;${m.is_read ? '' : 'border-left:3px solid var(--brand)'}" onclick="openAdminMessage('${m.id}')">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+        <div style="min-width:0">
+          <div style="font-weight:700">${esc(m.name || 'Anonymous')} ${m.is_read ? '' : '<span class="badge b-trial" style="margin-left:6px">new</span>'}</div>
+          <div class="muted" style="margin:2px 0 8px">
+            ${m.email ? esc(m.email) : ''}${m.phone ? ' · ' + esc(m.phone) : ''}${m.company ? ' · ' + esc(m.company) : ''}
+          </div>
+          <div style="white-space:pre-wrap;color:var(--ink);max-height:60px;overflow:hidden;text-overflow:ellipsis">${esc(m.message)}</div>
+        </div>
+        <div style="text-align:right;flex:none">
+          <div class="muted" style="font-size:12px;margin-bottom:8px">${fmtDateTime(m.created_at)}</div>
+          <div style="display:flex;gap:6px;justify-content:flex-end" onclick="event.stopPropagation()">
+            ${m.is_read
+              ? `<button class="btn btn-secondary btn-sm" onclick="markRead('${m.id}',0)">Unread</button>`
+              : `<button class="btn btn-secondary btn-sm" onclick="markRead('${m.id}',1)">Mark read</button>`}
+            <button class="btn btn-danger btn-sm" onclick="delMessage('${m.id}')">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function openAdminMessage(id) {
+  const m = MESSAGES.find(x => x.id === id);
+  if (!m) return;
+  modal(`
+    <h2 style="margin-bottom:2px">${esc(m.name || 'Anonymous')}</h2>
+    <div class="muted" style="margin-bottom:14px">
+      ${m.email ? esc(m.email) : ''}${m.phone ? ' · ' + esc(m.phone) : ''}${m.company ? ' · ' + esc(m.company) : ''}
+      <br>${fmtDateTime(m.created_at)}
+    </div>
+    <div style="white-space:pre-wrap;line-height:1.6;color:var(--ink);background:var(--bg-2,#f9f9fb);padding:14px;border-radius:8px;max-height:50vh;overflow-y:auto">${esc(m.message)}</div>
+    <div class="modal-actions" style="margin-top:16px;display:flex;gap:8px;justify-content:flex-end">
+      ${m.is_read
+        ? `<button class="btn btn-secondary" onclick="markRead('${m.id}',0); closeModal();">Mark unread</button>`
+        : `<button class="btn btn-secondary" onclick="markRead('${m.id}',1); closeModal();">Mark read</button>`}
+      <button class="btn btn-danger" onclick="delMessage('${m.id}'); closeModal();">Delete</button>
+      <button class="btn btn-primary" onclick="closeModal()">Close</button>
+    </div>
+  `);
+  if (!m.is_read) markRead(id, 1);
+}
+function fmtDateTime(d){ if(!d) return ''; try { return new Date(d.includes('Z')||d.includes('T')?d:d.replace(' ','T')+'Z').toLocaleString(); } catch(e){ return d; } }
+async function markRead(id, val) {
+  try { await api('/messages/' + id, { method: 'PATCH', body: JSON.stringify({ is_read: val }) }); loadMessages(); }
+  catch (e) { alert(e.message); }
+}
+async function delMessage(id) {
+  if (!confirm('Delete this message?')) return;
+  try { await api('/messages/' + id, { method: 'DELETE' }); loadMessages(); }
+  catch (e) { alert(e.message); }
+}
+
+// ── boot ──────────────────────────────────────────────────────────────
+(async () => { if (await checkSession()) showApp(); })();
+</script>
+</body>
+</html>

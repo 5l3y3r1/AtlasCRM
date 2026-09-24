@@ -13,3 +13,12 @@ uploads/*
 .DS_Store
 .env
 .env.*
+# ...but the template itself must be in the repo.
+!.env.example
+
+# Scraper run logs (5MB+ and growing — regenerated on every run)
+scraper/*.log
+
+# Claude Code local session state
+.claude/scheduled_tasks.lock
+.claude/settings.local.json

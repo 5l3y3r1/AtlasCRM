@@ -1,12 +1,23 @@
 node_modules
 npm-debug.log
+
+# Local data — production keeps these on the mounted volume, never in the image
+uploads/*
+!uploads/.gitkeep
 warm.db
 warm.db-shm
 warm.db-wal
-uploads/*
-!uploads/.gitkeep
+
+# Logs (scraper.log alone is ~6MB of dead weight in the image)
+*.log
+scraper/*.log
+
+# Tooling / VCS / docs — none of it is needed at runtime
 .git
 .gitignore
+.claude
+.env
+.env.*
 *.md
 _test.js
 _dom_test.js

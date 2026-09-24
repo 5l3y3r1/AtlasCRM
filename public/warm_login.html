@@ -2,26 +2,31 @@
 <html lang="ka">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>warm.ge — შესვლა / რეგისტრაცია</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>AtlasCRM — შესვლა</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/img/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="/js/lucide.min.js"></script>
-<script src="/js/supabase-shim.js"></script>
+<script src="/js/lucide.min.js?v=1"></script>
+<script src="/js/supabase-shim.js?v=1"></script>
 <style>
 /* ════════════════════════════════════════════════════════════════
-   warm.ge — Production design system
+   AtlasCRM — Production design system
    Single source of truth for colours, typography, icons.
    ════════════════════════════════════════════════════════════════ */
 
 :root {
     /* Brand */
-    --brand:           #EA580C;   /* solid warm orange */
-    --brand-hover:     #C2410C;
-    --brand-soft:      #FFF7ED;
-    --brand-soft-2:    #FFEDD5;
-    --brand-border:    #FED7AA;
+    --brand:           #1D4ED8;   /* ember terracotta */
+    --brand-hover:     #1E3A8A;
+    --brand-soft:      #EFF6FF;
+    --brand-soft-2:    #DBEAFE;
+    --brand-border:    #BFDBFE;
 
     /* Surfaces */
     --bg:              #F8FAFC;
@@ -140,7 +145,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
     /* subtle background pattern */
     background-image:
-        radial-gradient(circle at 15% 30%, rgba(234,88,12,0.04), transparent 40%),
+        radial-gradient(circle at 15% 30%, rgba(29, 78, 216,0.04), transparent 40%),
         radial-gradient(circle at 85% 70%, rgba(15,23,42,0.04), transparent 40%);
 }
 
@@ -158,7 +163,7 @@ body {
     background: var(--brand);
     color: white;
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 8px 24px rgba(234,88,12,0.25);
+    box-shadow: 0 8px 24px rgba(29, 78, 216,0.25);
 }
 .logo-icon .lucide-i, .logo-icon [data-lucide] { font-size: 28px; }
 .logo-text { font-size: 28px; font-weight: 700; margin-top: 12px; letter-spacing: -0.5px; color: var(--text); }
@@ -232,7 +237,7 @@ input:focus {
     outline: none;
     border-color: var(--brand);
     background: var(--surface);
-    box-shadow: 0 0 0 3px rgba(234,88,12,0.1);
+    box-shadow: 0 0 0 3px rgba(29, 78, 216,0.1);
 }
 
 .btn-main {
@@ -271,64 +276,72 @@ input:focus {
     margin-top: 22px;
 }
 .footer .flag-tag { background: transparent; border-color: var(--border); }
+
+@media (max-width: 520px) {
+    .container { max-width: 100%; padding: 0 4px; }
+    input { font-size: 16px; padding: 13px 14px; } /* prevent iOS zoom */
+    .logo-text { font-size: 24px; }
+    body { padding: 16px; }
+}
 </style>
 </head>
 <body>
 
 <div class="container">
     <div class="logo">
-        <div class="logo-icon"><i data-lucide="home" class="lucide-i"></i></div>
-        <div class="logo-text">warm.ge</div>
+        <div class="logo-icon"><svg viewBox="0 0 100 100" style="width:60%;height:60%"><path d="M 29 74 L 50 25 L 71 74" fill="none" stroke="#fff" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/><line x1="37.5" y1="55" x2="62.5" y2="55" stroke="#fff" stroke-width="12" stroke-linecap="round"/></svg></div>
+        <div class="logo-text">AtlasCRM</div>
         <div class="logo-sub">საქართველოს უძრავი ქონების CRM</div>
     </div>
 
     <div class="card">
-        <div class="tabs">
-            <button type="button" class="tab active" id="tab-login">შესვლა</button>
-            <button type="button" class="tab" id="tab-register">რეგისტრაცია</button>
-        </div>
 
         <div class="alert" id="alert"></div>
 
         <!-- LOGIN -->
         <div class="form active" id="form-login">
-            <h2>მოგესალმები</h2>
-            <div class="subtitle">შედი შენს ანგარიშში</div>
+            <h2 data-i18n="login_title">მოგესალმები</h2>
+            <div class="subtitle" data-i18n="login_subtitle">შედი შენს ანგარიშში</div>
 
-            <label>ელ. ფოსტა</label>
-            <input type="email" id="login-email" placeholder="email@warm.ge">
+            <label data-i18n="email">ელ. ფოსტა</label>
+            <input type="email" id="login-email" placeholder="email@example.com">
 
-            <label>პაროლი</label>
-            <input type="password" id="login-password" placeholder="••••••••">
+            <label data-i18n="password">პაროლი</label>
+            <div style="position:relative">
+                <input type="password" id="login-password" placeholder="••••••••" style="padding-right:42px">
+                <span onclick="togglePw('login-password',this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:#888;user-select:none"><i data-lucide="eye" class="lucide-i"></i></span>
+            </div>
 
-            <button type="button" class="btn-main" id="btn-login">შესვლა</button>
+            <button type="button" class="btn-main" id="btn-login" data-i18n="login_btn">შესვლა</button>
+            <div style="text-align:center;margin-top:14px">
+                <a href="#" onclick="showForgot();return false" style="font-size:13px;color:#888;text-decoration:none" data-i18n="forgot_link">პაროლი დაგავიწყდა?</a>
+            </div>
         </div>
 
-        <!-- REGISTER -->
-        <div class="form" id="form-register">
-            <h2>დარეგისტრირდი <i data-lucide="rocket" class="lucide-i"></i></h2>
-            <div class="subtitle">შექმენი შენი სააგენტო</div>
+        <!-- FORGOT PASSWORD -->
+        <div class="form" id="form-forgot">
+            <h2 data-i18n="forgot_title">პაროლის აღდგენა</h2>
+            <div class="subtitle" data-i18n="forgot_subtitle">მიუთითე ელფოსტა — გამოგიგზავნით აღდგენის ბმულს</div>
 
-            <label>სახელი და გვარი</label>
-            <input type="text" id="reg-name" placeholder="სახელი გვარი">
+            <label data-i18n="email">ელ. ფოსტა</label>
+            <input type="email" id="forgot-email" placeholder="email@example.com">
 
-            <label>სააგენტოს სახელი</label>
-            <input type="text" id="reg-company" placeholder="სააგენტო">
-
-            <label>ელ. ფოსტა</label>
-            <input type="email" id="reg-email" placeholder="email@email.com">
-
-            <label>ტელეფონი</label>
-            <input type="tel" id="reg-phone" placeholder="+995 5XX XXX XXX">
-
-            <label>პაროლი (მინ. 6 სიმბოლო)</label>
-            <input type="password" id="reg-password" placeholder="••••••••">
-
-            <button type="button" class="btn-main" id="btn-register">დარეგისტრირდი</button>
+            <button type="button" class="btn-main" id="btn-forgot" data-i18n="forgot_btn">ბმულის გაგზავნა</button>
+            <div style="text-align:center;margin-top:14px">
+                <a href="#" onclick="showLogin();return false" style="font-size:13px;color:#888;text-decoration:none" data-i18n="back_to_login">← შესვლაზე დაბრუნება</a>
+            </div>
         </div>
     </div>
 
-    <div class="footer">© 2026 warm.ge <span class="flag-tag">KA</span></div>
+    <div class="footer">
+        <a href="/terms" style="color:inherit;text-decoration:none">წესები</a>
+        ·
+        <a href="/privacy" style="color:inherit;text-decoration:none">კონფიდენციალურობა</a>
+        ·
+        © 2026 AtlasCRM
+        <button onclick="setLang('ka')" id="lang-ka" class="flag-tag" style="cursor:pointer">KA</button>
+        <button onclick="setLang('en')" id="lang-en" class="flag-tag" style="cursor:pointer">EN</button>
+    </div>
 </div>
 
 <script>
@@ -340,30 +353,120 @@ let client;
 window.addEventListener('load', () => {
     client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     
-    document.getElementById('tab-login').addEventListener('click', () => switchTab('login'));
-    document.getElementById('tab-register').addEventListener('click', () => switchTab('register'));
-    
     document.getElementById('btn-login').addEventListener('click', doLogin);
-    document.getElementById('btn-register').addEventListener('click', doRegister);
-    
+
     document.getElementById('login-password').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') doLogin();
     });
-    document.getElementById('reg-password').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') doRegister();
+    document.getElementById('btn-forgot').addEventListener('click', doForgot);
+    document.getElementById('forgot-email').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') doForgot();
     });
 });
 
 function switchTab(name) {
-    document.getElementById('tab-login').classList.remove('active');
-    document.getElementById('tab-register').classList.remove('active');
-    document.getElementById('form-login').classList.remove('active');
-    document.getElementById('form-register').classList.remove('active');
-    
-    document.getElementById('tab-' + name).classList.add('active');
-    document.getElementById('form-' + name).classList.add('active');
-    
+    // Registration removed — login is the only view. Kept as a safe no-op.
     hideAlert();
+}
+
+// ── Forgot password ──
+function showForm(id) {
+    hideAlert();
+    document.querySelectorAll('.form').forEach(f => f.classList.toggle('active', f.id === id));
+}
+function showForgot() {
+    showForm('form-forgot');
+    document.getElementById('forgot-email').value = document.getElementById('login-email').value.trim();
+}
+function showLogin() { showForm('form-login'); }
+
+async function doForgot() {
+    const email = document.getElementById('forgot-email').value.trim();
+    if (!email) { showAlert(t('forgot_need_email')); return; }
+
+    const btn = document.getElementById('btn-forgot');
+    btn.disabled = true;
+    btn.textContent = t('sending');
+    try {
+        const r = await fetch('/api/auth/forgot-password', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            credentials: 'include', body: JSON.stringify({ email })
+        });
+        const j = await r.json().catch(() => ({}));
+        if (!r.ok) { showAlert(j.error || t('forgot_failed')); return; }
+        // Switch back FIRST: showForm() calls hideAlert(), so showing the
+        // message before the switch would wipe it immediately.
+        showForm('form-login');
+        // The server deliberately answers the same whether or not the address
+        // exists, so the UI must not imply an account was found either.
+        showAlert(t('forgot_sent'), 'success');
+    } catch (e) {
+        showAlert(t('forgot_failed'));
+    } finally {
+        btn.disabled = false;
+        btn.textContent = t('forgot_btn');
+    }
+}
+
+function togglePw(id, el) {
+    const inp = document.getElementById(id);
+    const showing = inp.type === 'text';
+    inp.type = showing ? 'password' : 'text';
+    el.innerHTML = '<i data-lucide="' + (showing ? 'eye' : 'eye-off') + '" class="lucide-i"></i>';
+    if (window.lucide && window.lucide.createIcons) { try { window.lucide.createIcons(); } catch(e){} }
+}
+
+// ── i18n ──
+const I18N = {
+    tab_login:        { ka: 'შესვლა', en: 'Sign in' },
+    tab_register:     { ka: 'რეგისტრაცია', en: 'Register' },
+    login_title:      { ka: 'მოგესალმები', en: 'Welcome' },
+    login_subtitle:   { ka: 'შედი შენს ანგარიშში', en: 'Sign in to your account' },
+    email:            { ka: 'ელ. ფოსტა', en: 'Email' },
+    password:         { ka: 'პაროლი', en: 'Password' },
+    login_btn:        { ka: 'შესვლა', en: 'Sign in' },
+    register_title:   { ka: 'დარეგისტრირდი', en: 'Register' },
+    register_subtitle:{ ka: 'შექმენი შენი სააგენტო', en: 'Create your agency' },
+    full_name:        { ka: 'სახელი და გვარი', en: 'Full name' },
+    company_name:     { ka: 'სააგენტოს სახელი', en: 'Agency name' },
+    phone:            { ka: 'ტელეფონი', en: 'Phone' },
+    password_min:     { ka: 'პაროლი (მინ. 6 სიმბოლო)', en: 'Password (min. 6 chars)' },
+    register_btn:     { ka: 'დარეგისტრირდი', en: 'Register' },
+    forgot_link:      { ka: 'პაროლი დაგავიწყდა?', en: 'Forgot your password?' },
+    forgot_title:     { ka: 'პაროლის აღდგენა', en: 'Reset password' },
+    forgot_subtitle:  { ka: 'მიუთითე ელფოსტა — გამოგიგზავნით აღდგენის ბმულს', en: "Enter your email and we'll send you a reset link" },
+    forgot_btn:       { ka: 'ბმულის გაგზავნა', en: 'Send reset link' },
+    back_to_login:    { ka: '← შესვლაზე დაბრუნება', en: '← Back to sign in' },
+    forgot_need_email:{ ka: 'შეავსე ელ. ფოსტა', en: 'Enter your email' },
+    forgot_sent:      { ka: 'თუ ეს ელფოსტა რეგისტრირებულია, აღდგენის ბმული გაიგზავნა.', en: 'If that email is registered, a reset link has been sent.' },
+    forgot_failed:    { ka: 'ვერ მოხერხდა. სცადე თავიდან.', en: 'Something went wrong. Please try again.' },
+    sending:          { ka: 'იგზავნება...', en: 'Sending...' },
+};
+
+// Look up a translated string for use in JS (the data-i18n attribute only
+// covers static markup).
+function t(key) {
+    return (I18N[key] && I18N[key][currentLang]) || key;
+}
+let currentLang = (function(){ try { return localStorage.getItem('atlas_lang') || localStorage.getItem('warm_lang') || 'ka'; } catch(e){ return 'ka'; } })();
+function applyLang() {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (I18N[key] && I18N[key][currentLang]) el.textContent = I18N[key][currentLang];
+    });
+    document.documentElement.lang = currentLang;
+    const ka = document.getElementById('lang-ka'), en = document.getElementById('lang-en');
+    if (ka && en) {
+        ka.style.background = currentLang === 'ka' ? 'var(--brand)' : 'var(--surface-2)';
+        ka.style.color = currentLang === 'ka' ? '#fff' : 'var(--text-muted)';
+        en.style.background = currentLang === 'en' ? 'var(--brand)' : 'var(--surface-2)';
+        en.style.color = currentLang === 'en' ? '#fff' : 'var(--text-muted)';
+    }
+}
+function setLang(lang) {
+    currentLang = lang;
+    try { localStorage.setItem('atlas_lang', lang); } catch(e){}
+    applyLang();
 }
 
 function showAlert(msg, type) {
@@ -437,66 +540,43 @@ async function doRegister() {
     btn.textContent = 'მუშავდება...';
     
     try {
-        // 1. Auth signup
-        const authResult = await client.auth.signUp({ email: email, password: password });
-        
+        const nameParts = name.split(' ');
+        const firstName = nameParts[0];
+        const lastName = nameParts.slice(1).join(' ') || null;
+
+        // The server's /api/auth/signup creates the company + founder user
+        // (with hashed password) atomically and logs the user in. No extra
+        // company/user inserts are needed here.
+        const authResult = await client.auth.signUp({
+            email: email,
+            password: password,
+            options: { data: {
+                first_name: firstName,
+                last_name: lastName,
+                company_name: company,
+                phone: phone,
+            }}
+        });
+
         if (authResult.error) {
             let msg = authResult.error.message;
-            if (msg.includes('already registered')) msg = 'ეს ფოსტა უკვე დარეგისტრირებულია';
+            if (msg.includes('already exists') || msg.includes('already registered')) msg = 'ეს ფოსტა უკვე დარეგისტრირებულია';
             showAlert(msg);
             btn.disabled = false;
             btn.textContent = 'დარეგისტრირდი';
             return;
         }
-        
-        if (!authResult.data.user) {
-            showAlert('შეცდომა — auth user არ შეიქმნა');
+
+        if (!authResult.data || !authResult.data.user) {
+            showAlert('შეცდომა — მომხმარებელი ვერ შეიქმნა');
             btn.disabled = false;
             btn.textContent = 'დარეგისტრირდი';
             return;
         }
-        
-        // 2. Create company
-        const companyResult = await client
-            .from('companies')
-            .insert({ name: company, email: email, phone: phone })
-            .select()
-            .single();
-        
-        if (companyResult.error) {
-            showAlert('კომპანია ვერ შეიქმნა: ' + companyResult.error.message);
-            btn.disabled = false;
-            btn.textContent = 'დარეგისტრირდი';
-            return;
-        }
-        
-        // 3. Create user
-        const nameParts = name.split(' ');
-        const firstName = nameParts[0];
-        const lastName = nameParts.slice(1).join(' ') || null;
-        
-        const userResult = await client
-            .from('users')
-            .insert({
-                auth_user_id: authResult.data.user.id,
-                company_id: companyResult.data.id,
-                first_name: firstName,
-                last_name: lastName,
-                email: email,
-                phone: phone,
-                role: 'FOUNDER'
-            });
-        
-        if (userResult.error) {
-            showAlert('user ვერ შეიქმნა: ' + userResult.error.message);
-            btn.disabled = false;
-            btn.textContent = 'დარეგისტრირდი';
-            return;
-        }
-        
+
         showAlert('წარმატებით დარეგისტრირდი!', 'success');
         setTimeout(() => { window.location.href = '/app'; }, 1500);
-        
+
     } catch (e) {
         showAlert('შეცდომა: ' + e.message);
         btn.disabled = false;
@@ -509,8 +589,8 @@ function renderLucide(){
         try { window.lucide.createIcons(); } catch(e){}
     }
 }
-if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', renderLucide);
-else renderLucide();
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => { renderLucide(); applyLang(); });
+else { renderLucide(); applyLang(); }
 
 </script>
 

@@ -8,10 +8,10 @@ A production-ready real-estate CRM for Georgia, built on Node.js + SQLite. No Su
 cd server
 npm install
 npm run seed     # one-time: creates the demo company + login
-npm start        # runs the server on http://localhost:3000
+npm start        # runs the server on https://atlascrm.ge
 ```
 
-Open **http://localhost:3000** in your browser and log in with:
+Open **https://atlascrm.ge** in your browser and log in with:
 
 | email             | password   | role         |
 |-------------------|------------|--------------|

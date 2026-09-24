@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>AtlasCRM — სამართლებრივი დოკუმენტები</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/img/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+    --brand: #1D4ED8; --brand-hover: #1E3A8A; --brand-soft: #EFF6FF;
+    --bg: #F8FAFC; --surface: #FFFFFF; --surface-2: #F1F5F9;
+    --text: #0F172A; --text-muted: #64748B; --text-subtle: #94A3B8;
+    --border: #E2E8F0; --warning-soft: #FFFBEB; --warning: #F59E0B;
+    --radius-sm: 6px; --radius: 10px; --radius-lg: 14px;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: var(--font-sans); background: var(--bg); color: var(--text);
+    -webkit-font-smoothing: antialiased; line-height: 1.65; padding: 0 20px 80px;
+}
+.topbar {
+    position: sticky; top: 0; z-index: 10; background: rgba(248,250,252,.9);
+    backdrop-filter: blur(8px); border-bottom: 1px solid var(--border);
+    margin: 0 -20px 0; padding: 14px 20px;
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+}
+.brand { font-weight: 700; font-size: 17px; color: var(--brand); text-decoration: none; }
+.topbar nav { display: flex; gap: 6px; margin-left: auto; flex-wrap: wrap; }
+.topbar nav a {
+    font-size: 13px; font-weight: 600; color: var(--text-muted); text-decoration: none;
+    padding: 6px 11px; border-radius: var(--radius-sm);
+}
+.topbar nav a:hover { background: var(--surface-2); color: var(--text); }
+.topbar nav a.active { background: var(--brand-soft); color: var(--brand); }
+
+.wrap { max-width: 760px; margin: 0 auto; }
+.notice {
+    background: var(--warning-soft); border: 1px solid #FDE68A; color: #92400E;
+    border-radius: var(--radius); padding: 14px 16px; font-size: 13px; margin: 28px 0 8px;
+}
+.notice strong { display: block; margin-bottom: 4px; }
+
+section { margin-top: 40px; scroll-margin-top: 70px; }
+h1 { font-size: 27px; font-weight: 800; letter-spacing: -.5px; margin-bottom: 6px; }
+h2 {
+    font-size: 21px; font-weight: 700; letter-spacing: -.3px;
+    margin: 36px 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+}
+h3 { font-size: 15.5px; font-weight: 700; margin: 24px 0 8px; }
+p, li { font-size: 14.5px; color: #253044; }
+p { margin-bottom: 12px; }
+ul, ol { margin: 0 0 14px 22px; }
+li { margin-bottom: 6px; }
+.updated { font-size: 13px; color: var(--text-subtle); margin-bottom: 4px; }
+.ph { background: var(--brand-soft); color: var(--brand); padding: 1px 6px; border-radius: 4px; font-weight: 600; font-size: .92em; }
+table { width: 100%; border-collapse: collapse; margin: 14px 0 18px; font-size: 13.5px; }
+th, td { text-align: left; padding: 9px 11px; border: 1px solid var(--border); vertical-align: top; }
+th { background: var(--surface-2); font-weight: 600; }
+.tablewrap { overflow-x: auto; }
+footer { margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-muted); }
+footer a { color: var(--brand); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="topbar">
+    <a href="/" class="brand">AtlasCRM</a>
+    <nav>
+        <a href="#terms" id="nav-terms">წესები და პირობები</a>
+        <a href="#privacy" id="nav-privacy">კონფიდენციალურობა</a>
+        <a href="#data" id="nav-data">თქვენი მონაცემები</a>
+        <a href="/login">შესვლა</a>
+    </nav>
+</div>
+
+<div class="wrap">
+    <div class="notice">
+        <strong>⚠ შაბლონი — საჭიროებს იურისტის განხილვას</strong>
+        ეს დოკუმენტები მომზადებულია როგორც სამუშაო შაბლონი და ასახავს იმას, თუ როგორ
+        მუშაობს პროდუქტი სინამდვილეში. სანამ კომერციულად გამოიყენებთ, გადაამოწმებინეთ
+        იურისტს და შეავსეთ <span class="ph">[ფრჩხილებში]</span> მოცემული ველები თქვენი
+        კომპანიის რეალური მონაცემებით.
+    </div>
+
+    <!-- ══════════════════ TERMS ══════════════════ -->
+    <section id="terms">
+        <h1>წესები და პირობები</h1>
+        <div class="updated">ბოლო განახლება: <span class="ph">[თარიღი]</span></div>
+
+        <h2>1. ვინ ვართ</h2>
+        <p>
+            AtlasCRM (შემდგომში — „სერვისი“) არის უძრავი ქონების სააგენტოებისთვის განკუთვნილი
+            CRM პლატფორმა, რომელსაც უზრუნველყოფს <span class="ph">[კომპანიის სრული სახელი]</span>,
+            საიდენტიფიკაციო კოდი <span class="ph">[ს/კ]</span>, მისამართი
+            <span class="ph">[იურიდიული მისამართი]</span> (შემდგომში — „ჩვენ“).
+            კონტაქტი: <span class="ph">[email]</span>.
+        </p>
+
+        <h2>2. ანგარიში და წვდომა</h2>
+        <ul>
+            <li>სერვისით სარგებლობისთვის საჭიროა ანგარიშის შექმნა. თქვენ პასუხისმგებელი ხართ
+                თქვენი პაროლის კონფიდენციალურობაზე და ანგარიშიდან განხორციელებულ ყველა ქმედებაზე.</li>
+            <li>ანგარიშის შემქმნელი ხდება სააგენტოს მფლობელი (FOUNDER) და შეუძლია დაამატოს
+                თანამშრომლები სხვადასხვა როლით.</li>
+            <li>თითოეული სააგენტოს მონაცემები იზოლირებულია — სხვა სააგენტოს მომხმარებლებს
+                თქვენს მონაცემებზე წვდომა არ აქვთ.</li>
+            <li>აკრძალულია ანგარიშის გაზიარება იმაზე მეტ პირზე, ვიდრე თქვენი გეგმა ითვალისწინებს.</li>
+        </ul>
+
+        <h2>3. გეგმები, საცდელი პერიოდი და გადახდა</h2>
+        <ul>
+            <li>რეგისტრაციისას გააქტიურდება უფასო საცდელი პერიოდი
+                <span class="ph">[14]</span> დღით.</li>
+            <li>ფასები და ლიმიტები მითითებულია ფასების გვერდზე. ფასები მოცემულია
+                <span class="ph">[ლარში / დღგ-ს ჩათვლით თუ გარეშე]</span>.</li>
+            <li>ინვოისი გამოიწერება პერიოდის დასაწყისში. გადახდის მეთოდი —
+                <span class="ph">[საბანკო გადარიცხვა / ბარათი]</span>.</li>
+            <li>გადახდის ვადის გასვლის შემდეგ მოქმედებს <span class="ph">[5]</span>-დღიანი
+                საშეღავათო პერიოდი, რის შემდეგაც წვდომა შეჩერდება. მონაცემები არ იშლება
+                შეჩერებისთანავე — იხილეთ ქვემოთ, „მონაცემების შენახვა“.</li>
+            <li>ფასების ცვლილების შესახებ გაცნობებთ მინიმუმ <span class="ph">[30]</span> დღით ადრე.</li>
+        </ul>
+
+        <h2>4. თქვენი კონტენტი</h2>
+        <p>
+            სერვისში შეტანილი ყველა მონაცემი — ლიდები, კლიენტები, ობიექტები, გარიგებები,
+            დოკუმენტები — რჩება <strong>თქვენს საკუთრებაში</strong>. ჩვენ ვამუშავებთ მას
+            მხოლოდ იმისთვის, რომ სერვისი გაგიწიოთ. ნებისმიერ დროს შეგიძლიათ სრულად
+            გადმოწეროთ (იხ. <a href="#data">თქვენი მონაცემები</a>).
+        </p>
+
+        <h2>5. მისაღები გამოყენება</h2>
+        <p>სერვისის გამოყენებისას არ შეიძლება:</p>
+        <ul>
+            <li>კანონის დარღვევა, მათ შორის პერსონალურ მონაცემთა დაცვის კანონმდებლობის;</li>
+            <li>ისეთი პირების მონაცემების შეტანა, რომელთა დამუშავების საფუძველიც არ გაქვთ;</li>
+            <li>სერვისის უსაფრთხოების შემოწმება ან გვერდის ავლა ჩვენი წერილობითი თანხმობის გარეშე;</li>
+            <li>სერვისის გადაყიდვა ან მესამე პირისთვის წვდომის მიცემა ხელშეკრულების გარეშე.</li>
+        </ul>
+
+        <h2>6. ხელმისაწვდომობა</h2>
+        <p>
+            ჩვენ ვცდილობთ სერვისი იყოს მუდმივად ხელმისაწვდომი, თუმცა არ ვიძლევით გარანტიას
+            უწყვეტ მუშაობაზე. დაგეგმილი ტექნიკური სამუშაოების შესახებ წინასწარ გაცნობებთ.
+            <span class="ph">[თუ SLA გაქვთ — მიუთითეთ აქ.]</span>
+        </p>
+
+        <h2>7. პასუხისმგებლობის შეზღუდვა</h2>
+        <p>
+            კანონით დაშვებულ ფარგლებში, ჩვენი პასუხისმგებლობა შემოიფარგლება იმ თანხით,
+            რომელიც სერვისისთვის გადაგიხდიათ ბოლო <span class="ph">[12]</span> თვის
+            განმავლობაში. ჩვენ არ ვაგებთ პასუხს არაპირდაპირ ზიანზე, მიუღებელ შემოსავალზე
+            ან მონაცემთა დაკარგვაზე, რომელიც ჩვენი უხეში გაუფრთხილებლობით არ არის გამოწვეული.
+        </p>
+
+        <h2>8. ხელშეკრულების შეწყვეტა</h2>
+        <ul>
+            <li>თქვენ შეგიძლიათ ნებისმიერ დროს შეწყვიტოთ სარგებლობა.</li>
+            <li>ჩვენ შეგვიძლია შევაჩეროთ ანგარიში ამ პირობების არსებითი დარღვევისას —
+                გაფრთხილებით, გარდა იმ შემთხვევისა, როცა დარღვევა მყისიერ რეაგირებას საჭიროებს.</li>
+            <li>შეწყვეტამდე გირჩევთ გადმოწეროთ თქვენი მონაცემები.</li>
+        </ul>
+
+        <h2>9. მოქმედი სამართალი</h2>
+        <p>
+            ამ პირობებზე ვრცელდება <span class="ph">[საქართველოს]</span> კანონმდებლობა.
+            დავები განიხილება <span class="ph">[სასამართლო/არბიტრაჟი და ადგილი]</span>.
+        </p>
+    </section>
+
+    <!-- ══════════════════ PRIVACY ══════════════════ -->
+    <section id="privacy">
+        <h1>კონფიდენციალურობის პოლიტიკა</h1>
+        <div class="updated">ბოლო განახლება: <span class="ph">[თარიღი]</span></div>
+
+        <h2>1. ორი განსხვავებული როლი</h2>
+        <p>ეს მნიშვნელოვანი განსხვავებაა და განსაზღვრავს, ვინ რაზეა პასუხისმგებელი:</p>
+        <ul>
+            <li><strong>თქვენი ანგარიშის მონაცემები</strong> (სახელი, ელფოსტა, ტელეფონი,
+                გადახდები) — აქ <em>ჩვენ</em> ვართ მონაცემთა დამმუშავებელი.</li>
+            <li><strong>თქვენი კლიენტების მონაცემები</strong>, რომელსაც CRM-ში შეიტანთ —
+                აქ <em>თქვენ</em> ხართ დამმუშავებელი, ჩვენ კი მოქმედებთ თქვენი დავალებით.
+                თქვენი პასუხისმგებლობაა გქონდეთ სამართლებრივი საფუძველი ამ ადამიანების
+                მონაცემების შენახვაზე და აცნობოთ მათ ამის შესახებ.</li>
+        </ul>
+
+        <h2>2. რა მონაცემებს ვაგროვებთ</h2>
+        <div class="tablewrap">
+        <table>
+            <tr><th>კატეგორია</th><th>რა</th><th>რატომ</th></tr>
+            <tr><td>ანგარიში</td><td>სახელი, გვარი, ელფოსტა, ტელეფონი, როლი, სააგენტო</td><td>ავტორიზაცია და სერვისის მიწოდება</td></tr>
+            <tr><td>ავტორიზაცია</td><td>პაროლის ჰეში (bcrypt), სესიის ტოკენები</td><td>უსაფრთხო შესვლა. პაროლი ღია ტექსტით არასდროს ინახება</td></tr>
+            <tr><td>CRM კონტენტი</td><td>ლიდები, კლიენტები, ობიექტები, გარიგებები, ფაილები</td><td>თქვენ შეგაქვთ; ჩვენ ვინახავთ თქვენთვის</td></tr>
+            <tr><td>ტექნიკური</td><td>IP მისამართი, სერვერის ლოგები, ბოლო აქტივობის დრო</td><td>უსაფრთხოება, ბოროტად გამოყენების აღკვეთა, გამართვა</td></tr>
+            <tr><td>ბილინგი</td><td>ინვოისები, გადახდის სტატუსი, გადარიცხვის რეფერენსი</td><td>ბუღალტერია და კანონით დადგენილი აღრიცხვა</td></tr>
+        </table>
+        </div>
+        <p>
+            <strong>ჩვენ არ ვიყენებთ სარეკლამო ქუქებს, ანალიტიკის ტრეკერებს და არ ვყიდით
+            მონაცემებს.</strong> ერთადერთი ქუქი, რომელსაც ვაყენებთ, არის სესიის ქუქი
+            (<code>atlas_session</code>) — ის აუცილებელია შესვლისთვის. ბრაუზერის localStorage-ში
+            ინახება მხოლოდ თქვენი ინტერფეისის პარამეტრები (ენა, თემა).
+        </p>
+
+        <h2>3. მესამე მხარეები</h2>
+        <p>სერვისი იყენებს შემდეგ გარე კომპონენტებს — მიუთითეთ მხოლოდ ის, რაც რეალურად გაქვთ ჩართული:</p>
+        <div class="tablewrap">
+        <table>
+            <tr><th>მიმწოდებელი</th><th>დანიშნულება</th><th>რა მონაცემი ეზიარება</th></tr>
+            <tr><td><span class="ph">[ჰოსტინგი — მაგ. Railway]</span></td><td>სერვერი და მონაცემთა ბაზა</td><td>ყველა შენახული მონაცემი (მასპინძლობს)</td></tr>
+            <tr><td>Google Fonts</td><td>შრიფტები</td><td>IP მისამართი გვერდის ჩატვირთვისას</td></tr>
+            <tr><td>Mapbox</td><td>რუკა ობიექტების გვერდზე</td><td>ობიექტის კოორდინატები, IP</td></tr>
+            <tr><td>SMTP მიმწოდებელი</td><td>ელფოსტის დაგზავნა</td><td>მიმღების მისამართი და წერილის შიგთავსი</td></tr>
+        </table>
+        </div>
+        <p>
+            თუ სააგენტოს პარამეტრებში ჩართავთ საკუთარ ინტეგრაციებს (WhatsApp/Twilio, Meta,
+            TikTok, SMTP), მონაცემები გადაეცემა შესაბამის მიმწოდებელს თქვენი ინიციატივით.
+        </p>
+
+        <h2>4. უსაფრთხოება</h2>
+        <ul>
+            <li>პაროლები ინახება bcrypt-ჰეშირებული სახით.</li>
+            <li>სესიები გადაეცემა <code>httpOnly</code> ქუქით და სერვერზე გაუქმებადია.</li>
+            <li>პაროლის აღდგენის ბმულები ინახება მხოლოდ ჰეშირებულად და ერთჯერადია.</li>
+            <li>შესვლის მცდელობები შეზღუდულია (brute-force დაცვა).</li>
+            <li>თითოეული სააგენტოს მონაცემები სერვერზე იზოლირებულია.</li>
+            <li>მონაცემთა ბაზის ავტომატური სარეზერვო ასლები იქმნება
+                <span class="ph">[ყოველდღიურად]</span>.</li>
+        </ul>
+
+        <h2>5. მონაცემების შენახვა</h2>
+        <ul>
+            <li>აქტიური ანგარიშის მონაცემები ინახება სარგებლობის განმავლობაში.</li>
+            <li>ანგარიშის შეწყვეტის შემდეგ მონაცემები ინახება
+                <span class="ph">[30]</span> დღე (რომ შეძლოთ აღდგენა ან გადმოწერა),
+                შემდეგ კი იშლება.</li>
+            <li>ბუღალტრული დოკუმენტები (ინვოისები) ინახება კანონით დადგენილი ვადით —
+                <span class="ph">[საქართველოში, როგორც წესი, 6 წელი]</span>.</li>
+            <li>სარეზერვო ასლები ბრუნვაშია <span class="ph">[14]</span> დღე.</li>
+        </ul>
+    </section>
+
+    <!-- ══════════════════ DATA RIGHTS ══════════════════ -->
+    <section id="data">
+        <h1>თქვენი მონაცემები</h1>
+
+        <h2>გადმოწერა</h2>
+        <p>
+            სააგენტოს მფლობელს ან მენეჯერს ნებისმიერ დროს შეუძლია სრულად გადმოწეროს
+            კომპანიის მონაცემები — ლიდები, კლიენტები, ობიექტები, გარიგებები, ფოტოების
+            ჩამონათვალი და ყველა დანარჩენი ცხრილი:
+        </p>
+        <ul>
+            <li><strong>სრული არქივი (JSON):</strong> <code>/api/export/company.json</code></li>
+            <li><strong>ცალკეული ცხრილი Excel-ისთვის (CSV):</strong> <code>/api/export/leads.csv</code>,
+                <code>/api/export/listings.csv</code> და ა.შ.</li>
+            <li><strong>რა არის ხელმისაწვდომი:</strong> <code>/api/export/tables</code></li>
+        </ul>
+
+        <h2>შესწორება და წაშლა</h2>
+        <p>
+            CRM-ში არსებული ნებისმიერი ჩანაწერი შეგიძლიათ შეასწოროთ ან წაშალოთ პირდაპირ
+            ინტერფეისიდან. მთლიანი ანგარიშის ან სააგენტოს წაშლის მოთხოვნისთვის დაგვიკავშირდით:
+            <span class="ph">[email]</span>. მოთხოვნას დავამუშავებთ
+            <span class="ph">[30]</span> დღეში.
+        </p>
+
+        <h2>თქვენი კლიენტების უფლებები</h2>
+        <p>
+            თუ თქვენს CRM-ში არსებული პირი მოგმართავთ მისი მონაცემების ნახვის, შესწორების
+            ან წაშლის მოთხოვნით, ეს მოთხოვნა <strong>თქვენ უნდა დააკმაყოფილოთ</strong> —
+            ჩვენ ვმოქმედებთ მხოლოდ თქვენი დავალებით. ექსპორტი და ჩანაწერის წაშლა
+            ინტერფეისიდანვე შესაძლებელია.
+        </p>
+
+        <h2>კითხვები</h2>
+        <p>
+            პერსონალურ მონაცემებთან დაკავშირებული ნებისმიერი საკითხისთვის:
+            <span class="ph">[email]</span>. საქართველოში ზედამხედველი ორგანოა
+            პერსონალურ მონაცემთა დაცვის სამსახური.
+        </p>
+    </section>
+
+    <footer>
+        © 2026 AtlasCRM · <a href="/">მთავარი</a> · <a href="/login">შესვლა</a>
+    </footer>
+</div>
+
+<script>
+// Highlight whichever section is currently in view, so the sticky nav tells you
+// where you are in a long document.
+const links = { terms: 'nav-terms', privacy: 'nav-privacy', data: 'nav-data' };
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        Object.values(links).forEach(id => document.getElementById(id)?.classList.remove('active'));
+        document.getElementById(links[e.target.id])?.classList.add('active');
+    });
+}, { rootMargin: '-70px 0px -70% 0px' });
+Object.keys(links).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+});
+</script>
+</body>
+</html>

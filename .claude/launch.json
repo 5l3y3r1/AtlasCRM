@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "hearth-crm",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["--no-warnings", "server.js"],
+      "port": 3000
+    }
+  ]
+}

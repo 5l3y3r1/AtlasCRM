@@ -1,11 +1,11 @@
 'use strict';
 /**
- * seed.js — Demo data for warm.ge.
+ * seed.js — Demo data for AtlasCRM.
  * Schema-aligned: uses bedrooms_total / living_area / current_stage /
  * primary_agent_id / buyer_agent_id / due_at / scheduled_at etc.
  */
 const { nanoid } = require('nanoid');
-const { db }     = require('./db');
+const { db, genExtensionKey } = require('./db');
 const { hashPassword } = require('./auth');
 
 function id() { return nanoid(); }
@@ -35,13 +35,13 @@ db.prepare(`INSERT INTO companies (id, name, email, phone, address)
 const founder = id();
 const ag1 = id(), ag2 = id(), ag3 = id();
 const insertUser = db.prepare(`INSERT INTO users
-  (id, auth_user_id, company_id, first_name, last_name, email, password_hash, phone, role, bio)
-  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
+  (id, auth_user_id, company_id, first_name, last_name, email, password_hash, phone, role, bio, extension_key)
+  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`);
 const pwd = hashPassword('warm123');
-insertUser.run(founder, founder, companyId, 'ბესიკ', 'კავთარაძე',  'beso@prime.ge',   pwd, '+995 555 111 222', 'FOUNDER', 'სააგენტოს დამფუძნებელი, 15 წლის გამოცდილება ბაზარზე');
-insertUser.run(ag1,     ag1,     companyId, 'ნინო',   'კვარაცხელია','nino@prime.ge',  pwd, '+995 555 333 444', 'AGENT',   'ვაკე-საბურთალოს რეგიონის ექსპერტი');
-insertUser.run(ag2,     ag2,     companyId, 'გიორგი', 'მელაძე',    'giorgi@prime.ge', pwd, '+995 555 555 666', 'AGENT',   'ლუქს უძრავი ქონების სპეციალისტი');
-insertUser.run(ag3,     ag3,     companyId, 'თამარ',  'ბერიძე',    'tamar@prime.ge',  pwd, '+995 555 777 888', 'MANAGER', 'სამხრეთ თბილისის მენეჯერი');
+insertUser.run(founder, founder, companyId, 'ბესიკ', 'კავთარაძე',  'beso@prime.ge',   pwd, '+995 555 111 222', 'FOUNDER', 'სააგენტოს დამფუძნებელი, 15 წლის გამოცდილება ბაზარზე', genExtensionKey());
+insertUser.run(ag1,     ag1,     companyId, 'ნინო',   'კვარაცხელია','nino@prime.ge',  pwd, '+995 555 333 444', 'AGENT',   'ვაკე-საბურთალოს რეგიონის ექსპერტი', genExtensionKey());
+insertUser.run(ag2,     ag2,     companyId, 'გიორგი', 'მელაძე',    'giorgi@prime.ge', pwd, '+995 555 555 666', 'AGENT',   'ლუქს უძრავი ქონების სპეციალისტი', genExtensionKey());
+insertUser.run(ag3,     ag3,     companyId, 'თამარ',  'ბერიძე',    'tamar@prime.ge',  pwd, '+995 555 777 888', 'MANAGER', 'სამხრეთ თბილისის მენეჯერი', genExtensionKey());
 
 // ── Listings (12) ─────────────────────────────────────────────────────
 const districts = ['ვაკე','საბურთალო','ვერა','ისანი','ნაძალადევი','მთაწმინდა','დიდუბე','სამგორი'];
@@ -258,7 +258,7 @@ taskTitles.forEach((tt, i) => {
     due_at: daysFromNow(num(0, 14)),
     due_date: daysFromNow(num(0, 14)),
     priority: priorities[i],
-    status: i < 3 ? 'PENDING' : (i < 6 ? 'IN_PROGRESS' : 'DONE'),
+    status: i < 3 ? 'PENDING' : (i < 6 ? 'IN_PROGRESS' : 'COMPLETED'),
     created_at: daysAgo(num(1, 10)),
   });
 });
@@ -346,14 +346,14 @@ db.prepare("SELECT id, client_id, buyer_agent_id AS agent_id FROM deals WHERE cu
 // ── AI hunting profiles + external listings + alerts ──────────────────
 const hp1 = id(), hp2 = id();
 insertRow('agent_hunting_profiles', {
-  id: hp1, agent_id: ag1, name: 'ვაკის ბინები 80-150K',
+  id: hp1, company_id: companyId, agent_id: ag1, name: 'ვაკის ბინები 80-150K',
   regions: '["თბილისი"]', districts: '["ვაკე","ვერა"]',
   property_types: '["APARTMENT"]', listing_types: '["SALE"]', deal_type: 'SALE',
   price_min: 80000, price_max: 150000, min_price: 80000, max_price: 150000,
   min_bedrooms: 2, max_bedrooms: 3, is_active: 1, match_count: 23,
 });
 insertRow('agent_hunting_profiles', {
-  id: hp2, agent_id: ag2, name: 'მესაკუთრე უძრავი — საბურთალო',
+  id: hp2, company_id: companyId, agent_id: ag2, name: 'მესაკუთრე უძრავი — საბურთალო',
   regions: '["თბილისი"]', districts: '["საბურთალო"]',
   property_types: '["APARTMENT","HOUSE"]', listing_types: '["SALE","RENT"]', deal_type: 'ANY',
   price_min: 60000, price_max: 300000, min_price: 60000, max_price: 300000,
@@ -377,7 +377,7 @@ for (let i = 0; i < 6; i++) {
 }
 ext.slice(0, 3).forEach((eid, i) => {
   insertRow('property_alerts', {
-    id: id(), profile_id: i === 0 ? hp1 : hp2,
+    id: id(), company_id: companyId, profile_id: i === 0 ? hp1 : hp2,
     external_listing_id: eid,
     match_score: 0.6 + Math.random() * 0.4,
     status: i === 0 ? 'NEW' : 'VIEWED',

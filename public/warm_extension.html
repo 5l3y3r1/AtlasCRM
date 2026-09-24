@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AtlasCRM — ბრაუზერის გაფართოება</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/img/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="/img/favicon-16.png" sizes="16x16" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/atlas.css?v=1">
+  <style>
+    body { font-family: var(--font-sans); background: var(--bg); color: var(--text); margin: 0; }
+    .wrap { max-width: 760px; margin: 0 auto; padding: 40px 24px 64px; }
+    .hero { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; }
+    .badge-logo {
+      width: 52px; height: 52px; border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, var(--brand), var(--brand-hover));
+      display: grid; place-items: center; color: #fff; font-size: 26px; flex: none;
+      box-shadow: var(--shadow-md);
+    }
+    h1 { font-size: 24px; margin: 0; letter-spacing: -0.02em; }
+    .sub { color: var(--text-muted); margin: 2px 0 0; font-size: 14px; }
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 22px; margin-top: 22px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card h2 { font-size: 15px; margin: 0 0 14px; display: flex; align-items: center; gap: 8px; }
+    .dl {
+      display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
+      background: var(--brand); color: #fff; font-weight: 600; font-size: 15px;
+      padding: 13px 22px; border-radius: var(--radius); box-shadow: var(--shadow-sm);
+      transition: background .15s ease, transform .05s ease;
+    }
+    .dl:hover { background: var(--brand-hover); }
+    .dl:active { transform: translateY(1px); }
+    ol { margin: 0; padding-left: 20px; line-height: 1.85; font-size: 14px; }
+    ol code, .mono {
+      background: var(--surface-2); border: 1px solid var(--border);
+      padding: 2px 7px; border-radius: var(--radius-sm); font-size: 13px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .field { margin-top: 14px; }
+    .field label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; font-weight: 600; }
+    .copyrow { display: flex; gap: 8px; }
+    .copyrow input {
+      flex: 1; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px;
+      padding: 11px 13px; border: 1px solid var(--border); border-radius: var(--radius);
+      background: var(--surface-2); color: var(--text);
+    }
+    .copyrow button {
+      border: 1px solid var(--border); background: var(--surface); color: var(--text);
+      border-radius: var(--radius); padding: 0 16px; cursor: pointer; font-weight: 600; font-size: 13px;
+    }
+    .copyrow button:hover { background: var(--surface-2); }
+    .note {
+      margin-top: 16px; padding: 13px 15px; background: var(--brand-soft);
+      border: 1px solid var(--brand-border); border-radius: var(--radius);
+      color: var(--text); font-size: 13px; line-height: 1.6;
+    }
+    .steps-key { color: var(--brand-hover); font-weight: 700; }
+    a.back { color: var(--text-muted); text-decoration: none; font-size: 13px; }
+    a.back:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="/app">← დაშბორდი</a>
+    <div class="hero" style="margin-top:18px">
+      <div class="badge-logo">🏠</div>
+      <div>
+        <h1>AtlasCRM გაფართოება</h1>
+        <p class="sub">myhome.ge / ss.ge → ერთი დაკლიკებით გადაიტანე განცხადება შენს CRM-ში</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>1 · ჩამოტვირთე</h2>
+      <a class="dl" href="/downloads/warm-house-extension.zip" download>⬇ გადმოწერე გაფართოება (.zip)</a>
+      <p class="sub" style="margin-top:12px">გახსენი არქივი ნებისმიერ საქაღალდეში — შიგნით იქნება <span class="mono">manifest.json</span>.</p>
+    </div>
+
+    <div class="card">
+      <h2>2 · დააინსტალირე Chrome-ში</h2>
+      <ol>
+        <li>გახსენი <code>chrome://extensions</code></li>
+        <li>ჩართე <b>Developer mode</b> (ზედა მარჯვენა კუთხეში)</li>
+        <li>დააჭირე <b>Load unpacked</b> და მიუთითე გახსნილი საქაღალდე</li>
+        <li>გაფართოება გამოჩნდება ხელსაწყოთა ზოლში 🏠</li>
+      </ol>
+      <div class="note">
+        💡 ეს არის პირადი (unpacked) გაფართოება — ბრაუზერი მას ავტომატურად ვერ დააინსტალირებს
+        უსაფრთხოების გამო, ამიტომ საჭიროა ზემოთ ნაბიჯები. Chrome Web Store-ში გამოქვეყნების შემდეგ
+        ეს ღილაკი პირდაპირ მაღაზიის ბმულზე გადაგიყვანს.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>3 · დააკავშირე შენს CRM-თან</h2>
+      <p class="sub" style="margin-top:0">გახსენი გაფართოების პარამეტრები → <b>Send to CRM</b> → ჩასვი ეს ორი მნიშვნელობა:</p>
+      <div class="field">
+        <label>CRM URL</label>
+        <div class="copyrow">
+          <input id="crmUrl" readonly>
+          <button onclick="copyVal('crmUrl', this)">კოპირება</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>შენი პირადი გასაღები</label>
+        <div class="copyrow">
+          <input id="crmKey" readonly value="">
+          <button onclick="copyVal('crmKey', this)">კოპირება</button>
+          <button id="regenBtn" onclick="regenKey(this)" title="ძველი გასაღები დაუყოვნებლივ გაუქმდება">🔄</button>
+        </div>
+      </div>
+      <div class="note" id="keyNote">
+        🔑 ეს გასაღები <b>პირადია შენს ანგარიშზე</b> — გუნდის სხვა წევრებს თავიანთი, საკუთარი
+        გასაღები აქვთ. ობიექტები, რომლებსაც გაფართოებით დაამატებ, ყოველთვის შენს ანგარიშში
+        ჩაიწერება. შემდეგ myhome/ss.ge განცხადების გვერდზე დააჭირე
+        <span class="steps-key">Send to CRM</span> და განცხადება გამოჩნდება
+        <a href="/app">Properties (განცხადებები)</a> სიაში.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('crmUrl').value = window.location.origin;
+
+    function copyVal(id, btn) {
+      const el = document.getElementById(id);
+      el.select();
+      navigator.clipboard.writeText(el.value).then(() => {
+        const t = btn.textContent; btn.textContent = '✓'; setTimeout(() => btn.textContent = t, 900);
+      }).catch(() => {});
+    }
+
+    let myExtKey = '';
+
+    async function loadKey() {
+      try {
+        const r = await fetch('/api/auth/me', { credentials: 'include' });
+        if (!r.ok) throw new Error('not logged in');
+        const body = await r.json();
+        myExtKey = body?.data?.extension_key || body?.extension_key || '';
+        document.getElementById('crmKey').value = myExtKey;
+      } catch (e) {
+        // Not logged in from this browser — show a way back to login instead
+        // of a dead, unusable field.
+        document.getElementById('crmKey').value = '';
+        document.getElementById('crmKey').placeholder = 'გთხოვთ, ჯერ შედით სისტემაში';
+        document.getElementById('regenBtn').disabled = true;
+        document.getElementById('keyNote').innerHTML =
+          '⚠️ გასაღების სანახავად საჭიროა შესვლა. ' +
+          '<a href="/login">შედი აქ</a> და დაბრუნდი ამ გვერდზე.';
+      }
+    }
+    loadKey();
+
+    async function regenKey(btn) {
+      if (!myExtKey) return; // not logged in, nothing to regenerate
+      if (!confirm('ძველი გასაღები დაუყოვნებლივ გაუქმდება — ნებისმიერი მოწყობილობა, სადაც ძველი გასაღებია შეყვანილი, გაფართოებით ობიექტების დამატებას ვეღარ შეძლებს, სანამ ახალს არ ჩასვამ. გავაგრძელოთ?')) return;
+      btn.disabled = true;
+      try {
+        const r = await fetch('/api/auth/regenerate-extension-key', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          credentials: 'include'
+        });
+        const body = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(body.error || 'failed');
+        myExtKey = body.data.extension_key;
+        document.getElementById('crmKey').value = myExtKey;
+        const t = btn.textContent; btn.textContent = '✓'; setTimeout(() => btn.textContent = t, 900);
+      } catch (e) {
+        alert('გასაღების განახლება ვერ მოხერხდა');
+      } finally {
+        btn.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>

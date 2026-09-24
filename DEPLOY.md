@@ -1,4 +1,4 @@
-# warm.ge — Deployment Guide
+# AtlasCRM — Deployment Guide
 
 This app is **Node.js + Express + `node:sqlite`**. Two hard requirements:
 
@@ -8,14 +8,57 @@ This app is **Node.js + Express + `node:sqlite`**. Two hard requirements:
 
 ## Environment variables
 
+See `.env.example` for the complete annotated list. The ones that matter most:
+
 | Var | Purpose | Production value |
 |-----|---------|------------------|
+| `NODE_ENV` | enables the production guards | `production` |
+| `JWT_SECRET` | session signing | **a long random string — the server refuses to start without it when `NODE_ENV=production`** |
 | `PORT` | HTTP port | set by host, default 3000 |
-| `JWT_SECRET` | session signing | **set a long random string** |
-| `DB_PATH` | SQLite file path | a path on the persistent volume, e.g. `/data/warm.db` |
+| `DB_PATH` | SQLite file path | on the persistent volume, e.g. `/data/warm.db` |
+| `UPLOADS_DIR` | uploaded photos/documents | on the same volume, e.g. `/data/uploads` |
+| `BACKUP_DIR` | automatic snapshots | on the same volume, e.g. `/data/backups` |
+| `APP_URL` | public base URL | used to build password-reset links — wrong value = broken resets |
+| `MAIL_SMTP_*`, `MAIL_FROM` | transactional email | without these, nobody can recover a forgotten password |
+| `SUPER_ADMIN_EMAILS` | unlocks `/admin` | your own address |
 | `SCRAPER_KEY` | shared key for `/api/scraper/ingest` | a long random string |
+| `CRM_INGEST_KEY` | shared key for the browser extension | a long random string |
+
+Generate any secret with:
+
+```bash
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+```
 
 First boot seeds the DB automatically (login: `beso@prime.ge` / `warm123` — change this).
+
+## Health checks
+
+Point your host's health check at **`/healthz`**. It touches the database, so a
+container whose volume failed to mount reports 503 instead of a misleading OK.
+
+## Backups
+
+Snapshots are automatic — daily by default, keeping the last 14, written with
+`VACUUM INTO` while the server keeps serving. Each is a standalone `.db` file.
+
+**`BACKUP_DIR` must be on the same persistent volume as `DB_PATH`.** Put it
+anywhere else and the snapshots die with the container, which is the one
+scenario they exist for.
+
+To restore: stop the app, replace the file at `DB_PATH` with a snapshot
+(removing any `-wal` / `-shm` siblings), and start it again.
+
+```bash
+# verify a snapshot before trusting it
+node -e "const {DatabaseSync}=require('node:sqlite');
+         const d=new DatabaseSync('hearth-2026-09-15T03-54-39.db');
+         console.log(d.prepare('PRAGMA integrity_check').get());
+         console.log(d.prepare('SELECT COUNT(*) n FROM listings').get());"
+```
+
+A backup you have never restored is a hypothesis, not a backup — do this once
+on a copy before you need it for real.
 
 ---
 
