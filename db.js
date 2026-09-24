@@ -9,11 +9,18 @@ const path = require('path');
 const fs   = require('fs');
 const crypto = require('crypto');
 
-const DB_PATH = process.env.DB_PATH || path.join(__dirname, 'warm.db');
-// Ensure the directory exists (important for Railway volumes where /data may not pre-exist)
-const dbDir = path.dirname(DB_PATH);
-if (dbDir !== '.') fs.mkdirSync(dbDir, { recursive: true });
-const db = new DatabaseSync(DB_PATH);
+let actualDbPath = process.env.DB_PATH || path.join(__dirname, 'warm.db');
+let db;
+try {
+  db = new DatabaseSync(actualDbPath);
+} catch (e) {
+  // Fallback to /tmp if the original path is not writable (e.g., on Vercel)
+  const fallbackPath = path.join('/tmp', 'warm.db');
+  console.warn(`[db] Failed to open database at ${actualDbPath}: ${e.message}. Falling back to ${fallbackPath}`);
+  actualDbPath = fallbackPath;
+  db = new DatabaseSync(fallbackPath);
+}
+const DB_PATH = actualDbPath;
 
 db.exec(`
   PRAGMA journal_mode = WAL;
