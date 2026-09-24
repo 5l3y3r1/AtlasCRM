@@ -12,13 +12,23 @@
  *   GET    /api/auth/session
  *   GET    /api/auth/me
  *
- *   GET    /api/data/:table                  list with PostgREST-style filters
- *   POST   /api/data/:table                  insert
- *   PATCH  /api/data/:table?id=eq.X          update
- *   DELETE /api/data/:table?id=eq.X          delete
+ *   POST   /api/auth/create-agent     manager only; counts against the plan's seat limit
+ *   POST   /api/auth/change-password  signs out other devices
+ *   POST   /api/auth/set-user-password manager resets a teammate: {user_id, password}
+ *   POST   /api/auth/forgot-password  always answers the same, by design
+ *   POST   /api/auth/reset-password   token is single-use, 1h TTL
+ *   POST   /api/auth/send-verification emails a verification link to the current user
+ *   POST   /api/auth/verify-email     24h TTL
  *
- *   POST   /api/upload                       multipart file upload
- *   GET    /uploads/:filename                static
+ *   GET    /api/data/:table?col=eq.X&order=col.desc&limit=N            list
+ *   GET    /api/data/:table?select=*,fk(*)&id=eq.X                     with foreign-key embed
+ *   GET    /api/data/:table?count=exact&head=true                      just the count
+ *   POST   /api/data/:table                                            insert (body = row or rows[])
+ *   PATCH  /api/data/:table?id=eq.X                                    update (body = patch)
+ *   DELETE /api/data/:table?id=eq.X                                    delete
+ *
+ *   POST   /api/upload                                               multipart, field name `files`, up to 10×10MB
+ *   GET    /uploads/:filename                                        static
  *
  *   /                                         redirects to /login
  *   /login    /dashboard    /add-lead    /add-listing       static HTML
@@ -46,8 +56,8 @@ const messagingRoutes = require('./routes/messaging');
 const adminRoutes = require('./routes/admin');
 const contactRoutes = require('./routes/contact');
 const analyticsRoutes = require('./routes/analytics');
-const teamRoutes = require('./routes/team');
-const chatRoutes = require('./routes/chat');
+const teamRoutes  = require('./routes/team');
+const chatRoutes  = require('./routes/chat');
 const meetingsRoutes = require('./routes/meetings');
 const exportRoutes = require('./routes/export');
 const billingRoutes = require('./routes/billing');
@@ -131,6 +141,7 @@ const storage = multer.diskStorage({
     cb(null, `${Date.now()}-${nanoid(6)}-${safe}`);
   },
 });
+
 const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
 
 app.post('/api/upload', auth.requireAuth, upload.array('files', 10), (req, res) => {
@@ -180,6 +191,7 @@ const ROUTES = {
   '/terms':       'legal.html',
   '/privacy':     'legal.html',
 };
+
 // Cache-busting build id — changes on every deploy (Railway commit SHA) or, as a
 // fallback, on every process start. Injected into the ?v= of every asset URL so
 // browsers ALWAYS fetch the latest JS/CSS after a deploy (no manual version bumps).
@@ -192,8 +204,13 @@ function sendHtml(res, file) {
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   try {
     if (_htmlCache[file] === undefined) {
-      _htmlCache[file] = fs.readFileSync(path.join(publicDir, file), 'utf8')
-        .replace(/\?v=[\w.\-]+/g, '?v=' + BUILD_ID);
+      let html = fs.readFileSync(path.join(publicDir, file), 'utf8');
+      // Replace cache-busting token
+      html = html.replace(/\?v=[\w.\-]+/g, '?v=' + BUILD_ID);
+      // Replace Mapbox token placeholder
+      const mapboxToken = process.env.MAPBOX_TOKEN || '';
+      html = html.replace(/\{\{MAPBOX_TOKEN\}\}/g, mapboxToken);
+      _htmlCache[file] = html;
     }
     res.send(_htmlCache[file]);
   } catch (e) {
