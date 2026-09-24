@@ -19,7 +19,6 @@ Open **https://atlascrm.ge** in your browser and log in with:
 | `nino@prime.ge`   | `warm123`  | AGENT        |
 | `giorgi@prime.ge` | `warm123`  | AGENT        |
 | `tamar@prime.ge`  | `warm123`  | MANAGER      |
-
 ## What's inside
 
 ### Sidebar pages (every one is wired up to live data)
