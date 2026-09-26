@@ -14,4 +14,4 @@ RUN mkdir -p /app/data/uploads
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "echo 'AtlasCRM DATABASE MAINTENANCE MODE'; tail -f /dev/null"]
+CMD ["node", "--no-warnings", "server.js"]
