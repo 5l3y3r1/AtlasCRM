@@ -30,7 +30,19 @@ Generate any secret with:
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-First boot seeds the DB automatically (login: `beso@prime.ge` / `warm123` — change this).
+Production startup runs `server.js` without seeding demo accounts. For local
+development, `npm run seed` creates the documented demo data in `DB_PATH`.
+
+The Docker image sets `NODE_ENV=production`, so configure `JWT_SECRET` before
+deploying. Railway uses the start command and `/healthz` check in `railway.json`.
+With the Docker defaults, mount the persistent volume at `/app/data`; this holds
+`warm.db`, uploads, and the default backup directory. If an existing service uses
+a different mount, retain that mount and its `DB_PATH`, `UPLOADS_DIR`, and
+`BACKUP_DIR` overrides. Repository `data/` and `backups/` are excluded from builds.
+
+Run `npm test` before deploying. It starts the configured Railway command with
+an isolated temporary database and checks login, CRM writes, uploads, admin
+permissions, and logout. GitHub Actions runs these checks on Node 22.
 
 ## Health checks
 
