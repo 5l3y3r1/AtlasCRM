@@ -5,6 +5,7 @@
   "main": "server.js",
   "type": "commonjs",
   "scripts": {
+    "test": "node --test tests/*.test.cjs",
     "start": "node --no-warnings server.js",
     "dev": "node --no-warnings --watch server.js",
     "seed": "node --no-warnings seed.js",

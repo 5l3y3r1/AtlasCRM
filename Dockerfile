@@ -9,6 +9,7 @@ COPY . .
 
 ENV DB_PATH=/app/data/warm.db
 ENV UPLOADS_DIR=/app/data/uploads
+ENV NODE_ENV=production
 
 RUN mkdir -p /app/data/uploads
 

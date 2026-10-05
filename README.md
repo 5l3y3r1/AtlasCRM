@@ -84,6 +84,7 @@ Every data table that has a `company_id` column is automatically scoped to the l
 ```bash
 npm start              # production
 npm run dev            # restart on file changes (Node --watch)
+npm test               # isolated API smoke tests, no external credentials needed
 npm run seed           # seed demo data (no-op if already seeded)
 npm run reset          # delete the DB and re-seed from scratch
 ```
